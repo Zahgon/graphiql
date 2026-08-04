@@ -17,17 +17,10 @@ export interface Endpoint {
 export type Endpoints = Record<string, Endpoint>;
 
 export const EndpointsExtension: GraphQLExtensionDeclaration = () => {
-  return {
-    name: 'endpoints',
-  };
+    throw new Error("STUB");
 };
 
 export const LanguageServiceExecutionExtension: GraphQLExtensionDeclaration =
   api => {
-    // For schema
-    api.loaders.schema.register(new CodeFileLoader());
-    // For documents
-    api.loaders.documents.register(new CodeFileLoader());
-
-    return { name: 'languageServiceExecution' };
+      throw new Error("STUB");
   };

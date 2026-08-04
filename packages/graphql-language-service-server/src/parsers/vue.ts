@@ -46,36 +46,5 @@ export function parseVueSFC(source: string): ParseVueSFCResult {
 }
 
 export const vueParser: SourceParser = (text, uri, logger) => {
-  const asts = [];
-  const parseVueSFCResult = parseVueSFC(text);
-  if (parseVueSFCResult.type === 'error') {
-    logger.info(
-      `Could not parse the vue file at ${uri} to extract the graphql tags:`,
-    );
-    for (const error of parseVueSFCResult.errors) {
-      logger.info(String(error));
-    }
-    return null;
-  }
-
-  if (parseVueSFCResult.scriptAst !== undefined) {
-    asts.push(...parseVueSFCResult.scriptAst);
-  }
-  if (parseVueSFCResult.scriptSetupAst !== undefined) {
-    asts.push(...parseVueSFCResult.scriptSetupAst);
-  }
-
-  const rangeMapper: RangeMapper = range => {
-    return new Range(
-      new Position(
-        range.start.line + parseVueSFCResult.scriptOffset,
-        range.start.character,
-      ),
-      new Position(
-        range.end.line + parseVueSFCResult.scriptOffset,
-        range.end.character,
-      ),
-    );
-  };
-  return { asts, rangeMapper };
+    throw new Error("STUB");
 };

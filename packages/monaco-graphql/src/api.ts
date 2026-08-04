@@ -61,56 +61,43 @@ export class MonacoGraphQLAPI {
     diagnosticSettings,
     completionSettings,
   }: MonacoGraphQLAPIOptions) {
-    this._languageId = languageId;
-
-    if (schemas) {
-      this.setSchemaConfig(schemas);
-    }
-    this._modeConfiguration = modeConfiguration;
-    this._completionSettings = completionSettings;
-    this._diagnosticSettings = diagnosticSettings;
-    this._formattingOptions = formattingOptions;
+      throw new Error("STUB");
   }
 
   public get onDidChange(): monaco.IEvent<MonacoGraphQLAPI> {
-    return this._onDidChange.event;
+      throw new Error("STUB");
   }
 
   public get languageId(): string {
-    return this._languageId;
+      throw new Error("STUB");
   }
 
   public get modeConfiguration(): ModeConfiguration {
-    return this._modeConfiguration;
+      throw new Error("STUB");
   }
 
   public get schemas(): SchemaConfig[] | null {
-    return this._schemas;
+      throw new Error("STUB");
   }
 
   public schemasById(): Record<string, SchemaConfig> {
-    return this._schemasById;
+      throw new Error("STUB");
   }
 
   public get formattingOptions(): FormattingOptions {
-    return this._formattingOptions;
+      throw new Error("STUB");
   }
 
   public get diagnosticSettings(): DiagnosticSettings {
-    return this._diagnosticSettings;
+      throw new Error("STUB");
   }
 
   public get completionSettings(): CompletionSettings {
-    return {
-      ...this._completionSettings,
-      fillLeafsOnComplete:
-        this._completionSettings.__experimental__fillLeafsOnComplete ??
-        this._completionSettings.fillLeafsOnComplete,
-    };
+      throw new Error("STUB");
   }
 
   public get externalFragmentDefinitions() {
-    return this._externalFragmentDefinitions;
+      throw new Error("STUB");
   }
 
   /**
@@ -119,8 +106,7 @@ export class MonacoGraphQLAPI {
   public setSchemaConfig(schemas: SchemaConfig[]): void {
     this._schemas = schemas;
     this._schemasById = schemas.reduce((result, schema) => {
-      result[schema.uri] = schema;
-      return result;
+        throw new Error("STUB");
     }, Object.create(null));
     this._onDidChange.fire(this);
   }
@@ -132,13 +118,11 @@ export class MonacoGraphQLAPI {
   }
 
   public setModeConfiguration(modeConfiguration: ModeConfiguration): void {
-    this._modeConfiguration = modeConfiguration;
-    this._onDidChange.fire(this);
+      throw new Error("STUB");
   }
 
   public setFormattingOptions(formattingOptions: FormattingOptions): void {
-    this._formattingOptions = formattingOptions;
-    this._onDidChange.fire(this);
+      throw new Error("STUB");
   }
 
   public setDiagnosticSettings(diagnosticSettings: DiagnosticSettings): void {
@@ -147,8 +131,7 @@ export class MonacoGraphQLAPI {
   }
 
   public setCompletionSettings(completionSettings: CompletionSettings): void {
-    this._completionSettings = completionSettings;
-    this._onDidChange.fire(this);
+      throw new Error("STUB");
   }
 }
 

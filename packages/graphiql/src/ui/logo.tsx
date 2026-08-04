@@ -17,5 +17,5 @@ const defaultGraphiqlLogo = (
 export const GraphiQLLogo: FC<{ children?: ReactNode }> = ({
   children = defaultGraphiqlLogo,
 }) => {
-  return <div className="graphiql-logo">{children}</div>;
+    throw new Error("STUB");
 };

@@ -16,13 +16,7 @@ import { Kind } from 'graphql';
  * Whitespace tokens defined in GraphQL spec.
  */
 export const isIgnored = (ch: string) =>
-  ch === ' ' ||
-  ch === '\t' ||
-  ch === ',' ||
-  ch === '\n' ||
-  ch === '\r' ||
-  ch === '\uFEFF' ||
-  ch === '\u00A0';
+  { throw new Error("STUB"); };
 
 /**
  * The lexer rules. These are exactly as described by the spec.
@@ -53,36 +47,7 @@ export const LexRules = {
 export const ParseRules: { [name: string]: ParseRule } = {
   Document: [list('Definition')],
   Definition(token: Token): RuleKind | void {
-    switch (token.value) {
-      case '{':
-        return 'ShortQuery';
-      case 'query':
-        return 'Query';
-      case 'mutation':
-        return 'Mutation';
-      case 'subscription':
-        return 'Subscription';
-      case 'fragment':
-        return Kind.FRAGMENT_DEFINITION;
-      case 'schema':
-        return 'SchemaDef';
-      case 'scalar':
-        return 'ScalarDef';
-      case 'type':
-        return 'ObjectTypeDef';
-      case 'interface':
-        return 'InterfaceDef';
-      case 'union':
-        return 'UnionDef';
-      case 'enum':
-        return 'EnumDef';
-      case 'input':
-        return 'InputDef';
-      case 'extend':
-        return 'ExtendDef';
-      case 'directive':
-        return 'DirectiveDef';
-    }
+      throw new Error("STUB");
   },
   // Note: instead of "Operation", these rules have been separated out.
   ShortQuery: ['SelectionSet'],
@@ -116,13 +81,7 @@ export const ParseRules: { [name: string]: ParseRule } = {
   DefaultValue: [p('='), 'Value'],
   SelectionSet: [p('{'), list('Selection'), p('}')],
   Selection(token: Token, stream: CharacterStream) {
-    return token.value === '...'
-      ? stream.match(/[\s\u00a0,]*(on\b|@|{)/, false)
-        ? 'InlineFragment'
-        : 'FragmentSpread'
-      : stream.match(/[\s\u00a0,]*:/, false)
-        ? 'AliasedField'
-        : 'Field';
+      throw new Error("STUB");
   },
   // Note: this minor deviation of "AliasedField" simplifies the lookahead.
   AliasedField: [
@@ -162,42 +121,13 @@ export const ParseRules: { [name: string]: ParseRule } = {
   TypeCondition: [word('on'), 'NamedType'],
   // Variables could be parsed in cases where only Const is expected by spec.
   Value(token: Token) {
-    switch (token.kind) {
-      case 'Number':
-        return 'NumberValue';
-      case 'String':
-        return 'StringValue';
-      case 'Punctuation':
-        switch (token.value) {
-          case '[':
-            return 'ListValue';
-          case '{':
-            return 'ObjectValue';
-          case '$':
-            return 'Variable';
-          case '&':
-            return 'NamedType';
-        }
-
-        return null;
-      case 'Name':
-        switch (token.value) {
-          case 'true':
-          case 'false':
-            return 'BooleanValue';
-        }
-
-        if (token.value === 'null') {
-          return 'NullValue';
-        }
-        return 'EnumValue';
-    }
+      throw new Error("STUB");
   },
   NumberValue: [t('Number', 'number')],
   StringValue: [
     {
       style: 'string',
-      match: (token: Token) => token.kind === 'String',
+      match: (token: Token) => { throw new Error("STUB"); },
       update(state: State, token: Token) {
         if (token.value.startsWith('"""')) {
           state.inBlockstring = !token.value.slice(3).endsWith('"""');
@@ -212,7 +142,7 @@ export const ParseRules: { [name: string]: ParseRule } = {
   ObjectValue: [p('{'), list('ObjectField'), p('}')],
   ObjectField: [name('attribute'), p(':'), 'Value'],
   Type(token: Token) {
-    return token.value === '[' ? 'ListType' : 'NonNullType';
+      throw new Error("STUB");
   },
   // NonNullType has been merged into ListType to simplify.
   ListType: [p('['), 'Type', p(']'), opt(p('!'))],
@@ -307,22 +237,7 @@ export const ParseRules: { [name: string]: ParseRule } = {
   InputFieldsDef: [p('{'), list('InputValueDef'), p('}')],
   ExtendDef: [word('extend'), 'ExtensionDefinition'],
   ExtensionDefinition(token: Token): RuleKind | void {
-    switch (token.value) {
-      case 'schema':
-        return Kind.SCHEMA_EXTENSION;
-      case 'scalar':
-        return Kind.SCALAR_TYPE_EXTENSION;
-      case 'type':
-        return Kind.OBJECT_TYPE_EXTENSION;
-      case 'interface':
-        return Kind.INTERFACE_TYPE_EXTENSION;
-      case 'union':
-        return Kind.UNION_TYPE_EXTENSION;
-      case 'enum':
-        return Kind.ENUM_TYPE_EXTENSION;
-      case 'input':
-        return Kind.INPUT_OBJECT_TYPE_EXTENSION;
-    }
+      throw new Error("STUB");
   },
   [Kind.SCHEMA_EXTENSION]: ['SchemaDef'],
   [Kind.SCALAR_TYPE_EXTENSION]: ['ScalarDef'],
@@ -337,7 +252,7 @@ export const ParseRules: { [name: string]: ParseRule } = {
 function word(value: string) {
   return {
     style: 'keyword',
-    match: (token: Token) => token.kind === 'Name' && token.value === value,
+    match: (token: Token) => { throw new Error("STUB"); },
   };
 }
 
@@ -345,7 +260,7 @@ function word(value: string) {
 function name(style: string): Rule {
   return {
     style,
-    match: (token: Token) => token.kind === 'Name',
+    match: (token: Token) => { throw new Error("STUB"); },
     update(state: State, token: Token) {
       state.name = token.value;
     },
@@ -356,7 +271,7 @@ function name(style: string): Rule {
 function type(style: string) {
   return {
     style,
-    match: (token: Token) => token.kind === 'Name',
+    match: (token: Token) => { throw new Error("STUB"); },
     update(state: State, token: Token) {
       if (state.prevState?.prevState) {
         state.name = token.value;

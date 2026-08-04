@@ -21,16 +21,13 @@ export class QueryStore {
   }
 
   get length() {
-    return this.items.length;
+      throw new Error("STUB");
   }
 
   contains(item: QueryStoreItem) {
     return this.items.some(
       x =>
-        x.query === item.query &&
-        x.variables === item.variables &&
-        x.headers === item.headers &&
-        x.operationName === item.operationName,
+        { throw new Error("STUB"); },
     );
   }
 
@@ -51,10 +48,7 @@ export class QueryStore {
 
     const itemIndex = this.items.findIndex(
       x =>
-        x.query === item.query &&
-        x.variables === item.variables &&
-        x.headers === item.headers &&
-        x.operationName === item.operationName,
+        { throw new Error("STUB"); },
     );
     if (itemIndex !== -1) {
       this.items.splice(itemIndex, 1, item);
@@ -65,10 +59,7 @@ export class QueryStore {
   delete(item: QueryStoreItem) {
     const itemIndex = this.items.findIndex(
       x =>
-        x.query === item.query &&
-        x.variables === item.variables &&
-        x.headers === item.headers &&
-        x.operationName === item.operationName,
+        { throw new Error("STUB"); },
     );
     if (itemIndex !== -1) {
       this.items.splice(itemIndex, 1);
@@ -77,15 +68,11 @@ export class QueryStore {
   }
 
   fetchRecent() {
-    return this.items.at(-1);
+      throw new Error("STUB");
   }
 
   fetchAll() {
-    const raw = this.storage.get(this.key);
-    if (raw) {
-      return JSON.parse(raw)[this.key] as Array<QueryStoreItem>;
-    }
-    return [];
+      throw new Error("STUB");
   }
 
   push(item: QueryStoreItem) {

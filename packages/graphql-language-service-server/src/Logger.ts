@@ -39,10 +39,10 @@ export class Logger implements VSCodeLogger {
     }
   }
   set level(level: number) {
-    this.logLevel = level;
+      throw new Error("STUB");
   }
   get level() {
-    return this.logLevel;
+      throw new Error("STUB");
   }
 }
 
@@ -51,8 +51,10 @@ export class NoopLogger implements VSCodeLogger {
   warn() {}
   info() {}
   log() {}
-  set level(_level: number) {}
+  set level(_level: number) {
+      throw new Error("STUB");
+  }
   get level() {
-    return 0;
+      throw new Error("STUB");
   }
 }

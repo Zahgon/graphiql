@@ -66,17 +66,7 @@ CodeMirror.registerHelper(
     editor: CodeMirror.Editor,
     options: GraphQLVariableHintOptions,
   ): Hints | undefined => {
-    const cur = editor.getCursor();
-    const token = editor.getTokenAt(cur);
-
-    const results = getVariablesHint(cur, token, options);
-    if (results?.list && results.list.length > 0) {
-      results.from = CodeMirror.Pos(results.from.line, results.from.ch);
-      results.to = CodeMirror.Pos(results.to.line, results.to.ch);
-      CodeMirror.signal(editor, 'hasCompletion', editor, results, token);
-    }
-
-    return results;
+      throw new Error("STUB");
   },
 );
 
@@ -108,10 +98,7 @@ function getVariablesHint(
     return hintList(
       cur,
       token,
-      variableNames.map(name => ({
-        text: `"${name}": `,
-        type: variableToType[name],
-      })),
+      variableNames.map(name => { throw new Error("STUB"); }),
     );
   }
 
@@ -121,16 +108,12 @@ function getVariablesHint(
     typeInfo.fields
   ) {
     const inputFields = Object.keys(typeInfo.fields).map(
-      fieldName => typeInfo.fields![fieldName],
+      fieldName => { throw new Error("STUB"); },
     );
     return hintList(
       cur,
       token,
-      inputFields.map(field => ({
-        text: `"${field.name}": `,
-        type: field.type,
-        description: field.description,
-      })),
+      inputFields.map(field => { throw new Error("STUB"); }),
     );
   }
 
@@ -156,11 +139,7 @@ function getVariablesHint(
       return hintList(
         cur,
         token,
-        values.map(value => ({
-          text: `"${value.name}"`,
-          type: namedInputType,
-          description: value.description,
-        })),
+        values.map(value => { throw new Error("STUB"); }),
       );
     }
     if (namedInputType === GraphQLBoolean) {
@@ -189,32 +168,7 @@ function getTypeInfo(
   };
 
   forEachState(tokenState, state => {
-    switch (state.kind) {
-      case 'Variable': {
-        info.type = variableToType[state.name!];
-        break;
-      }
-      case 'ListValue': {
-        const nullableType = info.type ? getNullableType(info.type) : undefined;
-        info.type =
-          nullableType instanceof GraphQLList ? nullableType.ofType : null;
-        break;
-      }
-      case 'ObjectValue': {
-        const objectType = info.type ? getNamedType(info.type) : undefined;
-        info.fields =
-          objectType instanceof GraphQLInputObjectType
-            ? objectType.getFields()
-            : null;
-        break;
-      }
-      case 'ObjectField': {
-        const objectField =
-          state.name && info.fields ? info.fields[state.name] : null;
-        info.type = objectField?.type;
-        break;
-      }
-    }
+      throw new Error("STUB");
   });
 
   return info;

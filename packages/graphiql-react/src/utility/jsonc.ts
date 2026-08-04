@@ -42,7 +42,7 @@ export function parseJSONC(content: string) {
   );
   if (errors.length) {
     const output = formatter.format(
-      errors.map(({ error }) => printParseErrorCode(error)),
+      errors.map(({ error }) => { throw new Error("STUB"); }),
     );
     throw new SyntaxError(output);
   }

@@ -43,34 +43,6 @@ CodeMirror.registerHelper(
   'jump',
   'graphql',
   (token: CodeMirror.Token, options: GraphQLJumpOptions) => {
-    if (!options.schema || !options.onClick || !token.state) {
-      return;
-    }
-
-    // Given a Schema and a Token, produce a "SchemaReference" which refers to
-    // the particular artifact from the schema (such as a type, field, argument,
-    // or directive) that token references.
-    const { state } = token;
-    const { kind, step } = state;
-    const typeInfo = getTypeInfo(options.schema, state);
-
-    if (
-      (kind === 'Field' && step === 0 && typeInfo.fieldDef) ||
-      (kind === 'AliasedField' && step === 2 && typeInfo.fieldDef)
-    ) {
-      return getFieldReference(typeInfo);
-    }
-    if (kind === 'Directive' && step === 1 && typeInfo.directiveDef) {
-      return getDirectiveReference(typeInfo);
-    }
-    if (kind === 'Argument' && step === 0 && typeInfo.argDef) {
-      return getArgumentReference(typeInfo);
-    }
-    if (kind === 'EnumValue' && typeInfo.enumValue) {
-      return getEnumValueReference(typeInfo);
-    }
-    if (kind === 'NamedType' && typeInfo.type) {
-      return getTypeReference(typeInfo);
-    }
+      throw new Error("STUB");
   },
 );

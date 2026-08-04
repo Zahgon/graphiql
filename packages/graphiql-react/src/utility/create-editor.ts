@@ -7,12 +7,7 @@ import { Uri } from '../utility';
 export const onEditorContainerKeyDown: KeyboardEventHandler<
   HTMLDivElement
 > = event => {
-  const el = event.currentTarget;
-  const isFocused = el === document.activeElement;
-  if (isFocused && event.code === 'Enter') {
-    event.preventDefault();
-    el.querySelector('textarea')?.focus();
-  }
+    throw new Error("STUB");
 };
 
 export function getOrCreateModel({

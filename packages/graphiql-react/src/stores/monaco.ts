@@ -40,19 +40,7 @@ async function patchFirefox() {
   MouseTargetFactory._doHitTestWithCaretPositionFromPoint = (
     ...args: any[]
   ) => {
-    const [ctx, coords] = args;
-    const hitResult = ctx.viewDomNode.ownerDocument.caretPositionFromPoint(
-      coords.clientX,
-      coords.clientY,
-    );
-    if (hitResult) {
-      // Delegate to the original function if hitResult is valid
-      const result = originalFn(...args);
-      return result;
-    }
-    // We must return an object with `type: 0` to avoid the following error:
-    // Uncaught Error: can't access property "type", result is undefined
-    return { type: 0 };
+      throw new Error("STUB");
   };
 }
 
@@ -63,35 +51,6 @@ async function patchFirefox() {
  * In SSR (e.g., Next.js), static imports run on the server
  * where `window` is undefined and trigger an error.
  */
-export const monacoStore = createStore<MonacoStoreType>((set, get) => ({
-  actions: {
-    async initialize() {
-      const isInitialized = Boolean(get().monaco);
-      if (isInitialized) {
-        return;
-      }
-      const [monaco, { initializeMode }] = await Promise.all([
-        import('monaco-graphql/esm/monaco-editor.js'),
-        import('monaco-graphql/esm/lite.js'),
-      ]);
-      globalThis.__MONACO = monaco;
-      monaco.languages.json.jsonDefaults.setDiagnosticsOptions(
-        JSON_DIAGNOSTIC_OPTIONS,
-      );
-      monaco.editor.defineTheme(MONACO_THEME_NAME.dark, MONACO_THEME_DATA.dark);
-      monaco.editor.defineTheme(
-        MONACO_THEME_NAME.light,
-        MONACO_THEME_DATA.light,
-      );
-      if (navigator.userAgent.includes('Firefox/')) {
-        void patchFirefox();
-      }
-      const monacoGraphQL = initializeMode({
-        diagnosticSettings: MONACO_GRAPHQL_DIAGNOSTIC_SETTINGS,
-      });
-      set({ monaco, monacoGraphQL });
-    },
-  },
-}));
+export const monacoStore = createStore<MonacoStoreType>((set, get) => { throw new Error("STUB"); });
 
 export const useMonaco = createBoundedUseStore(monacoStore);

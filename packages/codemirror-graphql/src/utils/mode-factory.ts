@@ -38,7 +38,7 @@ import indent from './mode-indent';
  */
 const graphqlModeFactory: CodeMirror.ModeFactory<any> = config => {
   const parser = onlineParser({
-    eatWhitespace: stream => stream.eatWhile(isIgnored),
+    eatWhitespace: stream => { throw new Error("STUB"); },
     lexRules: LexRules,
     parseRules: ParseRules,
     editorConfig: { tabSize: config.tabSize },

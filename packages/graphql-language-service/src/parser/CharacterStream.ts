@@ -28,46 +28,28 @@ export default class CharacterStream implements CharacterStreamInterface {
     this._sourceText = sourceText;
   }
 
-  public getStartOfToken = (): number => this._start;
+  public getStartOfToken = (): number => { throw new Error("STUB"); };
 
-  public getCurrentPosition = (): number => this._pos;
+  public getCurrentPosition = (): number => { throw new Error("STUB"); };
 
   private _testNextCharacter(pattern: TokenPattern): boolean {
-    const character = this._sourceText.charAt(this._pos);
-    let isMatched = false;
-    if (typeof pattern === 'string') {
-      isMatched = character === pattern;
-    } else {
-      isMatched =
-        pattern instanceof RegExp
-          ? pattern.test(character)
-          : pattern(character);
-    }
-    return isMatched;
+      throw new Error("STUB");
   }
 
   public eol = (): boolean => this._sourceText.length === this._pos;
 
-  public sol = (): boolean => this._pos === 0;
+  public sol = (): boolean => { throw new Error("STUB"); };
 
   public peek = (): string | null => {
-    return this._sourceText.charAt(this._pos) || null;
+      throw new Error("STUB");
   };
 
   public next = (): string => {
-    const char = this._sourceText.charAt(this._pos);
-    this._pos++;
-    return char;
+      throw new Error("STUB");
   };
 
   public eat = (pattern: TokenPattern): string | undefined => {
-    const isMatched = this._testNextCharacter(pattern);
-    if (isMatched) {
-      this._start = this._pos;
-      this._pos++;
-      return this._sourceText.charAt(this._pos - 1);
-    }
-    return undefined;
+      throw new Error("STUB");
   };
 
   public eatWhile = (match: TokenPattern): boolean => {
@@ -92,11 +74,11 @@ export default class CharacterStream implements CharacterStreamInterface {
   public eatSpace = (): boolean => this.eatWhile(/[\s\u00a0]/);
 
   public skipToEnd = (): void => {
-    this._pos = this._sourceText.length;
+      throw new Error("STUB");
   };
 
   public skipTo = (position: number): void => {
-    this._pos = position;
+      throw new Error("STUB");
   };
 
   public match = (
@@ -142,28 +124,13 @@ export default class CharacterStream implements CharacterStreamInterface {
   };
 
   public backUp = (num: number): void => {
-    this._pos -= num;
+      throw new Error("STUB");
   };
 
-  public column = (): number => this._pos;
+  public column = (): number => { throw new Error("STUB"); };
 
   public indentation = (): number => {
-    const match = this._sourceText.match(/\s*/);
-    let indent = 0;
-    if (match && match.length !== 0) {
-      const whiteSpaces = match[0];
-      let pos = 0;
-      while (whiteSpaces.length > pos) {
-        if (whiteSpaces.charCodeAt(pos) === 9) {
-          indent += 2;
-        } else {
-          indent++;
-        }
-        pos++;
-      }
-    }
-
-    return indent;
+      throw new Error("STUB");
   };
 
   public current = (): string => this._sourceText.slice(this._start, this._pos);

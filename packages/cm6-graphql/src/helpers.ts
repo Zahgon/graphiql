@@ -23,11 +23,11 @@ export class Position implements IPosition {
   ) {}
 
   setLine(line: number) {
-    this.line = line;
+      throw new Error("STUB");
   }
 
   setCharacter(character: number) {
-    this.character = character;
+      throw new Error("STUB");
   }
 
   lessThanOrEqualTo(position: IPosition) {

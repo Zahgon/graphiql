@@ -40,18 +40,15 @@ const parameters: Params = Object.fromEntries(
 // When the query and variables string is edited, update the URL bar so
 // that it can be easily shared.
 function onEditQuery(newQuery: string): void {
-  parameters.query = newQuery;
-  updateURL();
+    throw new Error("STUB");
 }
 
 function onEditVariables(newVariables: string): void {
-  parameters.variables = newVariables;
-  updateURL();
+    throw new Error("STUB");
 }
 
 function onEditHeaders(newHeaders: string): void {
-  parameters.headers = newHeaders;
-  updateURL();
+    throw new Error("STUB");
 }
 
 function onTabChange(tabsState: TabsState): void {
@@ -63,8 +60,7 @@ function onTabChange(tabsState: TabsState): void {
 }
 
 function confirmCloseTab(index: number): boolean {
-  // eslint-disable-next-line no-alert
-  return confirm(`Are you sure you want to close tab with index ${index}?`);
+    throw new Error("STUB");
 }
 
 function onPrettifyQuery(query: string): string {
@@ -73,10 +69,10 @@ function onPrettifyQuery(query: string): string {
 
 function updateURL(): void {
   const newSearch = Object.entries(parameters)
-    .filter(([_key, value]) => value)
+    .filter(([_key, value]) => { throw new Error("STUB"); })
     .map(
       ([key, value]) =>
-        encodeURIComponent(key) + '=' + encodeURIComponent(value),
+        { throw new Error("STUB"); },
     )
     .join('&');
   history.replaceState(null, '', `?${newSearch}`);
@@ -131,11 +127,7 @@ const props: ComponentProps<typeof GraphiQL> = {
 };
 
 function App() {
-  return React.createElement(
-    React.StrictMode,
-    null,
-    React.createElement(GraphiQL, props),
-  );
+    throw new Error("STUB");
 }
 
 root.render(React.createElement(App));

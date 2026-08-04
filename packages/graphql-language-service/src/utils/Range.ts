@@ -27,13 +27,7 @@ export class Range implements IRange {
   }
 
   containsPosition = (position: IPosition): boolean => {
-    if (this.start.line === position.line) {
-      return this.start.character <= position.character;
-    }
-    if (this.end.line === position.line) {
-      return this.end.character >= position.character;
-    }
-    return this.start.line <= position.line && this.end.line >= position.line;
+      throw new Error("STUB");
   };
 }
 
@@ -46,11 +40,11 @@ export class Position implements IPosition {
   }
 
   setLine(line: number) {
-    this.line = line;
+      throw new Error("STUB");
   }
 
   setCharacter(character: number) {
-    this.character = character;
+      throw new Error("STUB");
   }
 
   lessThanOrEqualTo = (position: IPosition): boolean =>

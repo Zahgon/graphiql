@@ -91,8 +91,8 @@ const collectFragmentDefs = (op: string | undefined) => {
     try {
       visit(parse(op), {
         FragmentDefinition(def) {
-          externalFragments.push(def);
-        },
+              throw new Error("STUB");
+          },
       });
     } catch {
       return [];
@@ -185,10 +185,7 @@ export function getAutocompleteSuggestions(
       token,
       Object.values(schema.getTypeMap())
         .filter(isScalarType)
-        .map(type => ({
-          label: type.name,
-          kind: CompletionItemKind.Function,
-        })),
+        .map(type => { throw new Error("STUB"); }),
     );
   }
 
@@ -197,11 +194,8 @@ export function getAutocompleteSuggestions(
     return hintList(
       token,
       Object.values(schema.getTypeMap())
-        .filter(type => isObjectType(type) && !type.name.startsWith('__'))
-        .map(type => ({
-          label: type.name,
-          kind: CompletionItemKind.Function,
-        })),
+        .filter(type => { throw new Error("STUB"); })
+        .map(type => { throw new Error("STUB"); }),
     );
   }
 
@@ -211,10 +205,7 @@ export function getAutocompleteSuggestions(
       token,
       Object.values(schema.getTypeMap())
         .filter(isInterfaceType)
-        .map(type => ({
-          label: type.name,
-          kind: CompletionItemKind.Function,
-        })),
+        .map(type => { throw new Error("STUB"); }),
     );
   }
 
@@ -224,10 +215,7 @@ export function getAutocompleteSuggestions(
       token,
       Object.values(schema.getTypeMap())
         .filter(isUnionType)
-        .map(type => ({
-          label: type.name,
-          kind: CompletionItemKind.Function,
-        })),
+        .map(type => { throw new Error("STUB"); }),
     );
   }
 
@@ -236,11 +224,8 @@ export function getAutocompleteSuggestions(
     return hintList(
       token,
       Object.values(schema.getTypeMap())
-        .filter(type => isEnumType(type) && !type.name.startsWith('__'))
-        .map(type => ({
-          label: type.name,
-          kind: CompletionItemKind.Function,
-        })),
+        .filter(type => { throw new Error("STUB"); })
+        .map(type => { throw new Error("STUB"); }),
     );
   }
 
@@ -250,10 +235,7 @@ export function getAutocompleteSuggestions(
       token,
       Object.values(schema.getTypeMap())
         .filter(isInputObjectType)
-        .map(type => ({
-          label: type.name,
-          kind: CompletionItemKind.Function,
-        })),
+        .map(type => { throw new Error("STUB"); }),
     );
   }
 
@@ -289,19 +271,7 @@ export function getAutocompleteSuggestions(
       return hintList(
         token,
         argDefs.map(
-          (argDef: GraphQLArgument): CompletionItem => ({
-            label: argDef.name,
-            insertText: getInputInsertText(argDef.name + ': ', argDef.type),
-            insertTextMode: InsertTextMode.adjustIndentation,
-            insertTextFormat: InsertTextFormat.Snippet,
-            command: SuggestionCommand,
-            labelDetails: {
-              detail: ' ' + String(argDef.type),
-            },
-            documentation: argDef.description ?? undefined,
-            kind: CompletionItemKind.Variable,
-            type: argDef.type,
-          }),
+          (argDef: GraphQLArgument): CompletionItem => { throw new Error("STUB"); },
         ),
       );
     }
@@ -320,17 +290,7 @@ export function getAutocompleteSuggestions(
         : CompletionItemKind.Field;
     return hintList(
       token,
-      objectFields.map(field => ({
-        label: field.name,
-        detail: String(field.type),
-        documentation: field?.description ?? undefined,
-        kind: completionKind,
-        type: field.type,
-        insertText: getInputInsertText(field.name + ': ', field.type),
-        insertTextMode: InsertTextMode.adjustIndentation,
-        insertTextFormat: InsertTextFormat.Snippet,
-        command: SuggestionCommand,
-      })),
+      objectFields.map(field => { throw new Error("STUB"); }),
     );
   }
 
@@ -353,7 +313,7 @@ export function getAutocompleteSuggestions(
     );
     return hintList(
       token,
-      variableDefinitions.filter(v => v.detail === namedInputType?.name),
+      variableDefinitions.filter(v => { throw new Error("STUB"); }),
     );
   }
 
@@ -391,31 +351,16 @@ export function getAutocompleteSuggestions(
     return hintList(
       token,
       Object.values(schema.getTypeMap())
-        .filter(type => isOutputType(type) && !type.name.startsWith('__'))
-        .map(type => ({
-          label: type.name,
-          kind: CompletionItemKind.Function,
-          insertText: options?.fillLeafsOnComplete
-            ? type.name + '\n'
-            : type.name,
-          insertTextMode: InsertTextMode.adjustIndentation,
-        })),
+        .filter(type => { throw new Error("STUB"); })
+        .map(type => { throw new Error("STUB"); }),
     );
   }
   if (unwrappedState.kind === RuleKinds.INPUT_VALUE_DEF && step === 2) {
     return hintList(
       token,
       Object.values(schema.getTypeMap())
-        .filter(type => isInputType(type) && !type.name.startsWith('__'))
-        .map(type => ({
-          label: type.name,
-          kind: CompletionItemKind.Function,
-          insertText: options?.fillLeafsOnComplete
-            ? type.name + '\n$1'
-            : type.name,
-          insertTextMode: InsertTextMode.adjustIndentation,
-          insertTextFormat: InsertTextFormat.Snippet,
-        })),
+        .filter(type => { throw new Error("STUB"); })
+        .map(type => { throw new Error("STUB"); }),
     );
   }
 
@@ -518,49 +463,7 @@ function getSuggestionsForFieldNames(
     return hintList(
       token,
       fields.map<CompletionItem>((field, index) => {
-        const suggestion: CompletionItem = {
-          // This will sort the fields in the same order they are listed in the schema
-          sortText: String(index) + field.name,
-          label: field.name,
-          detail: String(field.type),
-
-          documentation: field.description ?? undefined,
-          deprecated: Boolean(field.deprecationReason),
-          isDeprecated: Boolean(field.deprecationReason),
-          deprecationReason: field.deprecationReason,
-          kind: CompletionItemKind.Field,
-          labelDetails: {
-            detail: ' ' + field.type.toString(),
-          },
-
-          type: field.type,
-        };
-        if (options?.fillLeafsOnComplete) {
-          // const hasArgs =
-          //   // token.state.needsAdvance &&
-          //   // @ts-expect-error
-          //   parentType?._fields[field?.name];
-
-          suggestion.insertText = getFieldInsertText(field);
-
-          // oxlint-disable-next-line eslint-js/logical-assignment-operators
-          if (!suggestion.insertText) {
-            suggestion.insertText = getInsertText(
-              field.name,
-              field.type,
-              // if we are replacing a field with arguments, we don't want the extra line
-              field.name + (token.state.needsAdvance ? '' : '\n'),
-            );
-          }
-
-          if (suggestion.insertText) {
-            suggestion.insertTextFormat = InsertTextFormat.Snippet;
-            suggestion.insertTextMode = InsertTextMode.adjustIndentation;
-            suggestion.command = SuggestionCommand;
-          }
-        }
-
-        return suggestion;
+          throw new Error("STUB");
       }),
     );
   }
@@ -579,23 +482,14 @@ function getSuggestionsForInputValues(
     queryText,
     schema,
     token,
-  ).filter(v => v.detail === namedInputType?.name);
+  ).filter(v => { throw new Error("STUB"); });
 
   if (namedInputType instanceof GraphQLEnumType) {
     const values = namedInputType.getValues();
     return hintList(
       token,
       values
-        .map<CompletionItem>((value: GraphQLEnumValue) => ({
-          label: value.name,
-          detail: String(namedInputType),
-          documentation: value.description ?? undefined,
-          deprecated: Boolean(value.deprecationReason),
-          isDeprecated: Boolean(value.deprecationReason),
-          deprecationReason: value.deprecationReason,
-          kind: CompletionItemKind.EnumMember,
-          type: namedInputType,
-        }))
+        .map<CompletionItem>((value: GraphQLEnumValue) => { throw new Error("STUB"); })
         .concat(queryVariables),
     );
   }
@@ -638,99 +532,31 @@ function getSuggestionsForImplements(
   const typeMap = schema.getTypeMap();
 
   const schemaInterfaces = objectValues(typeMap).filter(isInterfaceType);
-  const schemaInterfaceNames = schemaInterfaces.map(({ name }) => name);
+  const schemaInterfaceNames = schemaInterfaces.map(({ name }) => { throw new Error("STUB"); });
   const inlineInterfaces: Set<string> = new Set();
   runOnlineParser(documentText, (_, state: State) => {
-    if (state.name) {
-      // gather inline interface definitions
-      if (
-        state.kind === RuleKinds.INTERFACE_DEF &&
-        !schemaInterfaceNames.includes(state.name)
-      ) {
-        inlineInterfaces.add(state.name);
-      }
-      // gather the other interfaces the current type/interface definition implements
-      // so we can filter them out below
-      if (
-        state.kind === RuleKinds.NAMED_TYPE &&
-        state.prevState?.kind === RuleKinds.IMPLEMENTS
-      ) {
-        if (typeInfo.interfaceDef) {
-          const existingType = typeInfo.interfaceDef
-            ?.getInterfaces()
-            .find(({ name }) => name === state.name);
-          if (existingType) {
-            return;
-          }
-          const type = schema.getType(state.name);
-          const interfaceConfig = typeInfo.interfaceDef?.toConfig();
-          typeInfo.interfaceDef = new GraphQLInterfaceType({
-            ...interfaceConfig,
-            interfaces: [
-              ...interfaceConfig.interfaces,
-              (type as GraphQLInterfaceType) ||
-                new GraphQLInterfaceType({ name: state.name, fields: {} }),
-            ],
-          });
-        } else if (typeInfo.objectTypeDef) {
-          const existingType = typeInfo.objectTypeDef
-            ?.getInterfaces()
-            .find(({ name }) => name === state.name);
-          if (existingType) {
-            return;
-          }
-          const type = schema.getType(state.name);
-          const objectTypeConfig = typeInfo.objectTypeDef?.toConfig();
-          typeInfo.objectTypeDef = new GraphQLObjectType({
-            ...objectTypeConfig,
-            interfaces: [
-              ...objectTypeConfig.interfaces,
-              (type as GraphQLInterfaceType) ||
-                new GraphQLInterfaceType({ name: state.name, fields: {} }),
-            ],
-          });
-        }
-      }
-    }
+      throw new Error("STUB");
   });
 
   const currentTypeToExtend = typeInfo.interfaceDef || typeInfo.objectTypeDef;
 
   const siblingInterfaces = currentTypeToExtend?.getInterfaces() || [];
-  const siblingInterfaceNames = siblingInterfaces.map(({ name }) => name);
+  const siblingInterfaceNames = siblingInterfaces.map(({ name }) => { throw new Error("STUB"); });
 
   // TODO: we should be using schema.getPossibleTypes() here, but
   const possibleInterfaces = schemaInterfaces
     .concat(
-      [...inlineInterfaces].map(name => ({ name }) as GraphQLInterfaceType),
+      [...inlineInterfaces].map(name => { throw new Error("STUB"); }),
     )
     .filter(
       ({ name }) =>
-        name !== currentTypeToExtend?.name &&
-        !siblingInterfaceNames.includes(name),
+        { throw new Error("STUB"); },
     );
 
   return hintList(
     token,
     possibleInterfaces.map(type => {
-      const result = {
-        label: type.name,
-        kind: CompletionItemKind.Interface,
-        type,
-      } as CompletionItem;
-      if (type?.description) {
-        result.documentation = type.description;
-      }
-      // TODO: should we report what an interface implements in CompletionItem.detail?
-      // result.detail = 'Interface'
-      // const interfaces = type.astNode?.interfaces;
-      // if (interfaces && interfaces.length > 0) {
-      //   result.detail += ` (implements ${interfaces
-      //     .map(i => i.name.value)
-      //     .join(' & ')})`;
-      // }
-
-      return result;
+        throw new Error("STUB");
     }),
   );
 }
@@ -763,18 +589,13 @@ function getSuggestionsForFragmentTypeConditions(
   } else {
     const typeMap = schema.getTypeMap();
     possibleTypes = objectValues(typeMap).filter(
-      type => isCompositeType(type) && !type.name.startsWith('__'),
+      type => { throw new Error("STUB"); },
     );
   }
   return hintList(
     token,
     possibleTypes.map(type => {
-      const namedType = getNamedType(type);
-      return {
-        label: String(type),
-        documentation: (namedType?.description as string | undefined) || '',
-        kind: CompletionItemKind.Field,
-      };
+        throw new Error("STUB");
     }),
   );
 }
@@ -801,35 +622,12 @@ function getSuggestionsForFragmentSpread(
   const relevantFrags = fragments.filter(
     frag =>
       // Only include fragments with known types.
-      typeMap[frag.typeCondition.name.value] &&
-      // Only include fragments which are not cyclic.
-      !(
-        defState &&
-        defState.kind === RuleKinds.FRAGMENT_DEFINITION &&
-        defState.name === frag.name.value
-      ) &&
-      // Only include fragments which could possibly be spread here.
-      isCompositeType(typeInfo.parentType) &&
-      isCompositeType(typeMap[frag.typeCondition.name.value]) &&
-      doTypesOverlap(
-        schema,
-        typeInfo.parentType,
-        typeMap[frag.typeCondition.name.value] as GraphQLCompositeType,
-      ),
+      { throw new Error("STUB"); },
   );
 
   return hintList(
     token,
-    relevantFrags.map(frag => ({
-      label: frag.name.value,
-      detail: String(typeMap[frag.typeCondition.name.value]),
-      documentation: `fragment ${frag.name.value} on ${frag.typeCondition.name.value}`,
-      labelDetails: {
-        detail: `fragment ${frag.name.value} on ${frag.typeCondition.name.value}`,
-      },
-      kind: CompletionItemKind.Field,
-      type: typeMap[frag.typeCondition.name.value],
-    })),
+    relevantFrags.map(frag => { throw new Error("STUB"); }),
   );
 }
 
@@ -859,38 +657,7 @@ export function getVariableCompletions(
   const definitions: Record<string, any> = Object.create({});
 
   runOnlineParser(queryText, (_, state: State) => {
-    // TODO: gather this as part of `AllTypeInfo`, as I don't think it's optimal to re-run the parser like this
-    if (state?.kind === RuleKinds.VARIABLE && state.name) {
-      variableName = state.name;
-    }
-    if (state?.kind === RuleKinds.NAMED_TYPE && variableName) {
-      const parentDefinition = getParentDefinition(state, RuleKinds.TYPE);
-      if (parentDefinition?.type) {
-        variableType = schema.getType(
-          parentDefinition?.type,
-        ) as GraphQLInputObjectType;
-      }
-    }
-
-    if (variableName && variableType && !definitions[variableName]) {
-      // append `$` if the `token.string` is not already `$`, or describing a variable
-      // this appears to take care of it everywhere
-      const replaceString =
-        token.string === '$' || token?.state?.kind === 'Variable'
-          ? variableName
-          : '$' + variableName;
-      definitions[variableName] = {
-        detail: variableType.toString(),
-        insertText: replaceString,
-        label: '$' + variableName,
-        rawInsert: replaceString,
-        type: variableType,
-        kind: CompletionItemKind.Variable,
-      } as CompletionItem;
-
-      variableName = null;
-      variableType = null;
-    }
+      throw new Error("STUB");
   });
 
   return objectValues(definitions);
@@ -901,32 +668,7 @@ export function getFragmentDefinitions(
 ): Array<FragmentDefinitionNode> {
   const fragmentDefs: FragmentDefinitionNode[] = [];
   runOnlineParser(queryText, (_, state: State) => {
-    if (
-      state.kind === RuleKinds.FRAGMENT_DEFINITION &&
-      state.name &&
-      state.type
-    ) {
-      fragmentDefs.push({
-        kind: RuleKinds.FRAGMENT_DEFINITION,
-        name: {
-          kind: Kind.NAME,
-          value: state.name,
-        },
-
-        selectionSet: {
-          kind: RuleKinds.SELECTION_SET,
-          selections: [],
-        },
-
-        typeCondition: {
-          kind: RuleKinds.NAMED_TYPE,
-          name: {
-            kind: Kind.NAME,
-            value: state.type,
-          },
-        },
-      });
-    }
+      throw new Error("STUB");
   });
 
   return fragmentDefs;
@@ -942,11 +684,7 @@ function getSuggestionsForVariableDefinition(
   return hintList(
     token,
     // TODO: couldn't get Exclude<> working here
-    inputTypes.map((type: GraphQLNamedType) => ({
-      label: type.name,
-      documentation: type?.description || '',
-      kind: CompletionItemKind.Variable,
-    })),
+    inputTypes.map((type: GraphQLNamedType) => { throw new Error("STUB"); }),
   );
 }
 
@@ -959,14 +697,10 @@ function getSuggestionsForDirective(
   if (state.prevState?.kind) {
     const directives = schema
       .getDirectives()
-      .filter(directive => canUseDirective(state.prevState, directive));
+      .filter(directive => { throw new Error("STUB"); });
     return hintList(
       token,
-      directives.map(directive => ({
-        label: directive.name,
-        documentation: directive?.description || '',
-        kind: CompletionItemKind.Function,
-      })),
+      directives.map(directive => { throw new Error("STUB"); }),
     );
   }
   return [];
@@ -980,14 +714,10 @@ function getSuggestionsForDirectiveArguments(
   schema: GraphQLSchema,
   _kind: string,
 ): Array<CompletionItem> {
-  const directive = schema.getDirectives().find(d => d.name === state.name);
+  const directive = schema.getDirectives().find(d => { throw new Error("STUB"); });
   return hintList(
     token,
-    directive?.args.map(arg => ({
-      label: arg.name,
-      documentation: arg.description || '',
-      kind: CompletionItemKind.Field,
-    })) || [],
+    directive?.args.map(arg => { throw new Error("STUB"); }) || [],
   );
 }
 

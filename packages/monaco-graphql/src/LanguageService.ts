@@ -59,47 +59,15 @@ export class LanguageService {
     fillLeafsOnComplete,
     completionSettings,
   }: GraphQLLanguageConfig) {
-    this._schemaLoader = defaultSchemaLoader;
-    if (schemas) {
-      this._schemas = schemas;
-      this._cacheSchemas();
-    }
-    if (parser) {
-      this._parser = parser;
-    }
-    this._completionSettings = {
-      ...completionSettings,
-      fillLeafsOnComplete:
-        completionSettings?.fillLeafsOnComplete ?? fillLeafsOnComplete,
-    };
-
-    if (parseOptions) {
-      this._parseOptions = parseOptions;
-    }
-    if (customValidationRules) {
-      this._customValidationRules = customValidationRules;
-    }
-    if (externalFragmentDefinitions) {
-      if (Array.isArray(externalFragmentDefinitions)) {
-        this._externalFragmentDefinitionNodes = externalFragmentDefinitions;
-      } else {
-        this._externalFragmentDefinitionsString = externalFragmentDefinitions;
-      }
-    }
+      throw new Error("STUB");
   }
 
   private _cacheSchemas() {
-    for (const schema of this._schemas) {
-      this._cacheSchema(schema);
-    }
+      throw new Error("STUB");
   }
 
   private _cacheSchema(schemaConfig: SchemaConfig) {
-    const schema = this._schemaLoader(schemaConfig, this.parse.bind(this));
-    return this._schemaCache.set(schemaConfig.uri, {
-      ...schemaConfig,
-      schema,
-    });
+      throw new Error("STUB");
   }
 
   /**
@@ -108,85 +76,32 @@ export class LanguageService {
    * @returns {SchemaCacheItem | undefined}
    */
   public getSchemaForFile(uri: string): SchemaCacheItem | undefined {
-    if (!this._schemas.length) {
-      return;
-    }
-    if (this._schemas.length === 1) {
-      return this._schemaCache.get(this._schemas[0]!.uri);
-    }
-    const schema = this._schemas.find(schemaConfig => {
-      if (!schemaConfig.fileMatch) {
-        return false;
-      }
-      return schemaConfig.fileMatch.some(glob => {
-        const isMatch = picomatch(glob);
-        return isMatch(uri);
-      });
-    });
-    if (schema) {
-      const cacheEntry = this._schemaCache.get(schema.uri);
-      if (cacheEntry) {
-        return cacheEntry;
-      }
-      const cache = this._cacheSchema(schema);
-      return cache.get(schema.uri);
-    }
+      throw new Error("STUB");
   }
 
   public getExternalFragmentDefinitions(): FragmentDefinitionNode[] {
-    if (
-      !this._externalFragmentDefinitionNodes &&
-      this._externalFragmentDefinitionsString
-    ) {
-      const definitionNodes: FragmentDefinitionNode[] = [];
-      try {
-        visit(this._parser(this._externalFragmentDefinitionsString), {
-          FragmentDefinition(node) {
-            definitionNodes.push(node);
-          },
-        });
-      } catch {
-        throw new Error(
-          `Failed parsing externalFragmentDefinitions string:\n${this._externalFragmentDefinitionsString}`,
-        );
-      }
-
-      this._externalFragmentDefinitionNodes = definitionNodes;
-    }
-    return this._externalFragmentDefinitionNodes!;
+      throw new Error("STUB");
   }
 
   /**
    * Override `schemas` config entirely.
    */
   public async updateSchemas(schemas: SchemaConfig[]): Promise<void> {
-    this._schemas = schemas;
-    this._cacheSchemas();
+      throw new Error("STUB");
   }
 
   /**
    * Overwrite an existing schema config by Uri string.
    */
   public updateSchema(schema: SchemaConfig): void {
-    const schemaIndex = this._schemas.findIndex(c => c.uri === schema.uri);
-    if (schemaIndex < 0) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        'updateSchema could not find a schema in your config by that URI',
-        schema.uri,
-      );
-      return;
-    }
-    this._schemas[schemaIndex] = schema;
-    this._cacheSchema(schema);
+      throw new Error("STUB");
   }
 
   /**
    * Add a schema to the config.
    */
   public addSchema(schema: SchemaConfig): void {
-    this._schemas.push(schema);
-    this._cacheSchema(schema);
+      throw new Error("STUB");
   }
   /**
    * Uses the configured parser
@@ -209,18 +124,7 @@ export class LanguageService {
     documentText: string,
     position: IPosition,
   ) => {
-    const schema = this.getSchemaForFile(uri);
-    if (!documentText || !schema?.schema) {
-      return [];
-    }
-    return getAutocompleteSuggestions(
-      schema.schema,
-      documentText,
-      position,
-      undefined,
-      this.getExternalFragmentDefinitions(),
-      { uri, ...this._completionSettings },
-    );
+      throw new Error("STUB");
   };
   /**
    * get diagnostics using graphql validation
@@ -249,19 +153,7 @@ export class LanguageService {
     position: IPosition,
     options?: HoverConfig,
   ) => {
-    const schema = this.getSchemaForFile(uri);
-    if (schema && documentText.length > 3) {
-      return getHoverInformation(
-        schema.schema,
-        documentText,
-        position,
-        undefined,
-        {
-          useMarkdown: true,
-          ...options,
-        },
-      );
-    }
+      throw new Error("STUB");
   };
 
   public getVariablesJSONSchema = (
@@ -269,22 +161,6 @@ export class LanguageService {
     documentText: string,
     options?: JSONSchemaOptions,
   ) => {
-    const schema = this.getSchemaForFile(uri);
-    if (schema && documentText.length > 3) {
-      try {
-        const documentAST = this.parse(documentText);
-        const { variableToType } = getOperationASTFacts(
-          documentAST,
-          schema.schema,
-        );
-        if (variableToType) {
-          return getVariablesJSONSchema(variableToType, {
-            ...options,
-            scalarSchemas: schema.customScalarSchemas,
-          });
-        }
-      } catch {}
-    }
-    return null;
+      throw new Error("STUB");
   };
 }

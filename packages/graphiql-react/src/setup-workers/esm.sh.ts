@@ -5,14 +5,6 @@ import EditorWorker from 'https://esm.sh/monaco-editor@0.52.2/esm/vs/editor/edit
 
 globalThis.MonacoEnvironment = {
   getWorker(_workerId: string, label: string) {
-    // eslint-disable-next-line no-console
-    console.info('setup-workers/esm.sh', { label });
-    switch (label) {
-      case 'json':
-        return new JsonWorker();
-      case 'graphql':
-        return new GraphQLWorker();
-    }
-    return new EditorWorker();
-  },
+        throw new Error("STUB");
+    },
 };

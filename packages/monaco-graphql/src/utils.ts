@@ -20,20 +20,11 @@ import { MarkerSeverity } from 'monaco-editor/esm/vs/editor/common/standalone/st
 
 // for backwards compatibility
 export const getModelLanguageId = (model: monaco.editor.ITextModel) => {
-  if ('getModeId' in model) {
-    // @ts-expect-error -- for <0.30.0 support
-    return model.getModeId();
-  }
-  return model.getLanguageId();
+    throw new Error("STUB");
 };
 
 export function toMonacoRange(range: GraphQLRange): monaco.IRange {
-  return {
-    startLineNumber: range.start.line + 1,
-    startColumn: range.start.character + 1,
-    endLineNumber: range.end.line + 1,
-    endColumn: range.end.character + 1,
-  };
+    throw new Error("STUB");
 }
 
 export function toGraphQLPosition(position: monaco.Position): GraphQLPosition {
@@ -53,26 +44,7 @@ export function toCompletion(
   entry: GraphQLCompletionItem,
   range?: GraphQLRange,
 ): GraphQLWorkerCompletionItem {
-  return {
-    label: entry.label,
-    insertText: entry.insertText,
-    sortText: entry.sortText,
-    filterText: entry.filterText,
-    ...(entry.documentation && {
-      documentation: {
-        value: entry.documentation,
-      },
-    }),
-    detail: entry.detail,
-    ...(range && { range: toMonacoRange(range) }),
-    kind: entry.kind,
-    ...(entry.insertTextFormat && { insertTextFormat: entry.insertTextFormat }),
-    ...(entry.insertTextMode && { insertTextMode: entry.insertTextMode }),
-    ...(entry.command && {
-      command: { ...entry.command, id: entry.command.command },
-    }),
-    ...(entry.labelDetails && { labelDetails: entry.labelDetails }),
-  };
+    throw new Error("STUB");
 }
 
 /**
@@ -84,28 +56,13 @@ export function toCompletion(
 export function toMonacoSeverity(
   severity?: Diagnostic['severity'],
 ): monaco.MarkerSeverity {
-  const severityMap = {
-    1: MarkerSeverity.Error, // MarkerSeverity.Error
-    2: MarkerSeverity.Warning, // MarkerSeverity.Warning
-    3: MarkerSeverity.Info, // MarkerSeverity.Info
-    4: MarkerSeverity.Hint, // MarkerSeverity.Hint
-  };
-
-  return severity ? severityMap[severity] : severityMap[2];
+    throw new Error("STUB");
 }
 
 export function toMarkerData(
   diagnostic: Diagnostic,
 ): monaco.editor.IMarkerData {
-  return {
-    startLineNumber: diagnostic.range.start.line + 1,
-    endLineNumber: diagnostic.range.end.line + 1,
-    startColumn: diagnostic.range.start.character + 1,
-    endColumn: diagnostic.range.end.character,
-    message: diagnostic.message,
-    severity: toMonacoSeverity(diagnostic.severity),
-    code: (diagnostic.code as string) || undefined,
-  };
+    throw new Error("STUB");
 }
 
 /**
@@ -113,45 +70,5 @@ export function toMarkerData(
  * to the worker for language service instantiation
  */
 export const getStringSchema = (schemaConfig: SchemaConfig) => {
-  const {
-    schema: graphQLSchema,
-    documentAST,
-    introspectionJSON,
-    introspectionJSONString,
-    documentString,
-    ...rest
-  } = schemaConfig;
-  if (graphQLSchema) {
-    return {
-      ...rest,
-      documentString: printSchema(graphQLSchema),
-    };
-  }
-  if (introspectionJSONString) {
-    return {
-      ...rest,
-      introspectionJSONString,
-    };
-  }
-  if (documentString) {
-    return {
-      ...rest,
-      documentString,
-    };
-  }
-  if (introspectionJSON) {
-    return {
-      ...rest,
-      introspectionJSONString: JSON.stringify(introspectionJSON),
-    };
-  }
-
-  if (documentAST) {
-    const schema = buildASTSchema(documentAST, rest.buildSchemaOptions);
-    return {
-      ...rest,
-      documentString: printSchema(schema),
-    };
-  }
-  throw new Error('No schema supplied');
+    throw new Error("STUB");
 };

@@ -51,24 +51,7 @@ type CreateThemeSlice = (
 
 export const createThemeSlice: CreateThemeSlice =
   ({ editorTheme }) =>
-  (set, get) => ({
-    theme: null,
-    actions: {
-      setTheme(theme) {
-        const { storage } = get();
-        storage.set(STORAGE_KEY.theme, theme ?? '');
-        document.body.classList.remove('graphiql-light', 'graphiql-dark');
-        if (theme) {
-          document.body.classList.add(`graphiql-${theme}`);
-        }
-        const { monaco } = monacoStore.getState();
-        const resolvedTheme = theme ?? getSystemTheme();
-        const monacoTheme = editorTheme![resolvedTheme];
-        monaco?.editor.setTheme(monacoTheme);
-        set({ theme, monacoTheme });
-      },
-    },
-  });
+  (set, get) => { throw new Error("STUB"); };
 
 /**
  * Get the resolved theme - dark or light

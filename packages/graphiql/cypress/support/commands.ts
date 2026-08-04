@@ -52,89 +52,30 @@ declare namespace Cypress {
 }
 
 Cypress.Commands.add('dataCy', value => {
-  cy.get(`[data-cy="${value}"]`);
+    throw new Error("STUB");
 });
 
 Cypress.Commands.add('clickExecuteQuery', () => {
-  cy.get('.graphiql-execute-button').click();
+    throw new Error("STUB");
 });
 
 Cypress.Commands.add('clickPrettify', () => {
-  cy.get('[aria-label="Prettify query (Shift-Ctrl-P)"]').click();
+    throw new Error("STUB");
 });
 
 Cypress.Commands.add('visitWithOp', ({ query, variables, variablesString }) => {
-  let url = `?query=${encodeURIComponent(query)}`;
-  if (variables || variablesString) {
-    url += `&variables=${encodeURIComponent(
-      JSON.stringify(variables, null, 2) || variablesString,
-    )}`;
-  }
-  cy.visit(url);
+    throw new Error("STUB");
 });
 
 Cypress.Commands.add(
   'assertHasValues',
   ({ query, variables, variablesString, headersString, response }: Op) => {
-    cy.get(
-      '.graphiql-query-editor .view-lines.monaco-mouse-cursor-text',
-    ).should(element => {
-      const actual = normalizeMonacoWhitespace(element.get(0).innerText); // should be innerText
-      const expected = query;
-      expect(actual).to.equal(expected);
-    });
-    if (variables !== undefined) {
-      cy.contains('Variables').click();
-      cy.get(
-        '.graphiql-editor-tool .graphiql-editor .view-lines.monaco-mouse-cursor-text',
-      )
-        .eq(0)
-        .should(element => {
-          const actual = normalizeMonacoWhitespace(element.get(0).textContent);
-          const expected = JSON.stringify(variables, null, 2);
-          expect(actual).to.equal(expected);
-        });
-    }
-    if (variablesString !== undefined) {
-      cy.contains('Variables').click();
-      cy.get(
-        '.graphiql-editor-tool .graphiql-editor .view-lines.monaco-mouse-cursor-text',
-      )
-        .eq(0)
-        .should(element => {
-          const actual = normalizeMonacoWhitespace(element.get(0).innerText); // should be innerText
-          const expected = variablesString;
-          expect(actual).to.equal(expected);
-        });
-    }
-    if (headersString !== undefined) {
-      cy.contains('Headers').click();
-      cy.get(
-        '.graphiql-editor-tool .graphiql-editor .view-lines.monaco-mouse-cursor-text',
-      )
-        .eq(1)
-        .should(element => {
-          const actual = normalizeMonacoWhitespace(element.get(0).textContent);
-          const expected = headersString;
-          expect(actual).to.equal(expected);
-        });
-    }
-    if (response !== undefined) {
-      cy.get('.result-window').should(element => {
-        const actual = normalizeMonacoWhitespace(element.get(0).innerText); // should be innerText
-        const expected = JSON.stringify(response, null, 2);
-        expect(actual).to.equal(expected);
-      });
-    }
+      throw new Error("STUB");
   },
 );
 
 Cypress.Commands.add('assertQueryResult', expectedResult => {
-  cy.get('section.result-window').should(element => {
-    const actual = normalizeMonacoWhitespace(element.get(0).innerText); // should be innerText
-    const expected = JSON.stringify(expectedResult, null, 2);
-    expect(actual).to.equal(expected);
-  });
+    throw new Error("STUB");
 });
 
 // Monaco editor adds non-breaking spaces for all spaces, we need to normalize them
@@ -143,41 +84,12 @@ function normalizeMonacoWhitespace(str: string): string {
 }
 
 Cypress.Commands.add('containQueryResult', expected => {
-  cy.get('section.result-window').should(element => {
-    const actual = normalizeMonacoWhitespace(element.get(0).textContent);
-    expect(actual).to.contain(expected);
-  });
+    throw new Error("STUB");
 });
 
 Cypress.Commands.add(
   'assertLinterMarkWithMessage',
   (text, severity, message, uri = 'operation.graphql') => {
-    // Ensure error is visible in the DOM
-    cy.get(`.squiggly-${severity}`, { timeout: 10_000 });
-    cy.window().then(win => {
-      const { editor, MarkerSeverity } = win.__MONACO;
-      const models = editor.getModels();
-      const model = models.find(m => m.uri.path.endsWith(uri))!;
-      const markers = editor.getModelMarkers({
-        resource: model.uri,
-      });
-      // Only "Property is not allowed." isn't added in model markers
-      if (!message.endsWith(' is not allowed.')) {
-        expect(markers.length).to.be.greaterThan(0);
-        expect(markers[0].message).eq(message);
-        const markerSeverity = {
-          error: MarkerSeverity.Error,
-          warning: MarkerSeverity.Warning,
-        }[severity];
-        expect(markers[0].severity).eq(markerSeverity);
-      }
-      cy.contains(text).trigger('mousemove', {
-        // Hover in the right corner, because some errors like `Expected comma or closing brace` are
-        // highlighted at the end
-        position: 'bottomRight',
-        force: true, // otherwise popup doesn't show
-      });
-      cy.contains(message);
-    });
+      throw new Error("STUB");
   },
 );

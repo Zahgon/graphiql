@@ -11,11 +11,5 @@ export function graphql(
   schema?: GraphQLSchema,
   opts?: GqlExtensionsOptions,
 ): Extension[] {
-  return [
-    graphqlLanguageSupport(),
-    completion,
-    lint,
-    jump,
-    stateExtensions(schema, opts),
-  ];
+    throw new Error("STUB");
 }

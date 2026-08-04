@@ -18,19 +18,5 @@ type DefaultValueProps = {
 };
 
 export const DefaultValue: FC<DefaultValueProps> = ({ field }) => {
-  if (!('defaultValue' in field) || field.defaultValue === undefined) {
-    return null;
-  }
-  const ast = astFromValue(field.defaultValue, field.type);
-  if (!ast) {
-    return null;
-  }
-  return (
-    <>
-      {' = '}
-      <span className="graphiql-doc-explorer-default-value">
-        {printDefault(ast)}
-      </span>
-    </>
-  );
+    throw new Error("STUB");
 };

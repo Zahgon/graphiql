@@ -53,8 +53,8 @@ export function getOperationASTFacts(
 
   visit(documentAST, {
     OperationDefinition(node) {
-      operations.push(node);
-    },
+          throw new Error("STUB");
+      },
   });
 
   return { variableToType, operations };

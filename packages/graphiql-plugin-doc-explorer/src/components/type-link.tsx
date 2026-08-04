@@ -12,18 +12,5 @@ type TypeLinkProps = {
 };
 
 export const TypeLink: FC<TypeLinkProps> = ({ type }) => {
-  const { push } = useDocExplorerActions();
-
-  return renderType(type, def => (
-    <a
-      className="graphiql-doc-explorer-type-name"
-      onClick={event => {
-        event.preventDefault();
-        push({ name: def.name, def });
-      }}
-      href="#"
-    >
-      {def.name}
-    </a>
-  ));
+    throw new Error("STUB");
 };

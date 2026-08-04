@@ -41,12 +41,10 @@ export const getFragmentDependenciesForAST = (
 
   visit(parsedOperation, {
     FragmentDefinition(node) {
-      existingFrags.set(node.name.value, true);
-    },
+          throw new Error("STUB");
+      },
     FragmentSpread(node) {
-      if (!referencedFragNames.has(node.name.value)) {
-        referencedFragNames.add(node.name.value);
-      }
+        throw new Error("STUB");
     },
   });
 
@@ -62,14 +60,8 @@ export const getFragmentDependenciesForAST = (
   for (const ast of asts) {
     visit(ast, {
       FragmentSpread(node) {
-        if (
-          !referencedFragNames.has(node.name.value) &&
-          fragmentDefinitions.get(node.name.value)
-        ) {
-          asts.add(nullthrows(fragmentDefinitions.get(node.name.value)));
-          referencedFragNames.add(node.name.value);
-        }
-      },
+            throw new Error("STUB");
+        },
     });
     if (!existingFrags.has(ast.name.value)) {
       referencedFragments.push(ast);

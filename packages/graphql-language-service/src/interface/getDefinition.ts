@@ -66,7 +66,7 @@ export async function getDefinitionQueryResultForNamedType(
 ): Promise<DefinitionQueryResult> {
   const name = node.name.value;
   const defNodes = dependencies.filter(
-    ({ definition }) => definition.name && definition.name.value === name,
+    ({ definition }) => { throw new Error("STUB"); },
   );
 
   if (defNodes.length === 0) {
@@ -74,12 +74,12 @@ export async function getDefinitionQueryResultForNamedType(
   }
   const definitions: Array<Definition> = defNodes.map(
     ({ filePath, content, definition }) =>
-      getDefinitionForNodeDefinition(filePath || '', content, definition),
+      { throw new Error("STUB"); },
   );
 
   return {
     definitions,
-    queryRange: definitions.map(_ => getRange(text, node)),
+    queryRange: definitions.map(_ => { throw new Error("STUB"); }),
     printedName: name,
   };
 }
@@ -90,7 +90,7 @@ export async function getDefinitionQueryResultForField(
   dependencies: Array<ObjectTypeInfo>,
 ): Promise<DefinitionQueryResult> {
   const defNodes = dependencies.filter(
-    ({ definition }) => definition.name && definition.name.value === typeName,
+    ({ definition }) => { throw new Error("STUB"); },
   );
 
   if (defNodes.length === 0) {
@@ -102,7 +102,7 @@ export async function getDefinitionQueryResultForField(
   for (const { filePath, content, definition } of defNodes) {
     const fieldDefinition = (
       definition as ObjectTypeDefinitionNode
-    ).fields?.find(item => item.name.value === fieldName);
+    ).fields?.find(item => { throw new Error("STUB"); });
 
     if (fieldDefinition == null) {
       continue;
@@ -131,8 +131,8 @@ export async function getDefinitionQueryResultForArgument(
 
   for (const { filePath, content, definition } of dependencies) {
     const argDefinition = (definition as ObjectTypeDefinitionNode).fields
-      ?.find(item => item.name.value === fieldName)
-      ?.arguments?.find(item => item.name.value === argumentName);
+      ?.find(item => { throw new Error("STUB"); })
+      ?.arguments?.find(item => { throw new Error("STUB"); });
     if (argDefinition == null) {
       continue;
     }
@@ -160,7 +160,7 @@ export async function getDefinitionQueryResultForFragmentSpread(
 ): Promise<DefinitionQueryResult> {
   const name = fragment.name.value;
   const defNodes = dependencies.filter(
-    ({ definition }) => definition.name.value === name,
+    ({ definition }) => { throw new Error("STUB"); },
   );
 
   if (defNodes.length === 0) {
@@ -168,11 +168,11 @@ export async function getDefinitionQueryResultForFragmentSpread(
   }
   const definitions: Array<Definition> = defNodes.map(
     ({ filePath, content, definition }) =>
-      getDefinitionForFragmentDefinition(filePath || '', content, definition),
+      { throw new Error("STUB"); },
   );
   return {
     definitions,
-    queryRange: definitions.map(_ => getRange(text, fragment)),
+    queryRange: definitions.map(_ => { throw new Error("STUB"); }),
     printedName: name,
   };
 }

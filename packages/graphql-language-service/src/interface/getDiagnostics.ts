@@ -70,7 +70,7 @@ export function getDiagnostics(
       typeof externalFragments === 'string'
         ? externalFragments
         : externalFragments.reduce(
-            (acc, node) => acc + print(node) + '\n\n',
+            (acc, node) => { throw new Error("STUB"); },
             '',
           );
   }
@@ -116,14 +116,14 @@ export function validateQuery(
     customRules,
     isRelayCompatMode,
   ).flatMap(error =>
-    annotations(error, DIAGNOSTIC_SEVERITY.Error, 'Validation'),
+    { throw new Error("STUB"); },
   );
 
   // TODO: detect if > graphql@15.2.0, and use the new rule for this.
   const deprecationWarningAnnotations = validate(schema, ast, [
     NoDeprecatedCustomRule,
   ]).flatMap(error =>
-    annotations(error, DIAGNOSTIC_SEVERITY.Warning, 'Deprecation'),
+    { throw new Error("STUB"); },
   );
   return validationErrorAnnotations.concat(deprecationWarningAnnotations);
 }

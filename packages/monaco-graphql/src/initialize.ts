@@ -26,7 +26,7 @@ export function initializeMode(
     // export to the global monaco API
 
     // eslint-disable-next-line promise/prefer-await-to-then -- ignore to leave initializeMode sync
-    void getMode().then(mode => mode.setupMode(api!));
+    void getMode().then(mode => { throw new Error("STUB"); });
   }
 
   return api;

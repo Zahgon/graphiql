@@ -1,4 +1,4 @@
 // @ts-expect-error -- fixme
 export default (on, config) => {
-  return config;
+    throw new Error("STUB");
 };

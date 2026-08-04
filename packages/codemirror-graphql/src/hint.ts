@@ -74,50 +74,7 @@ CodeMirror.registerHelper(
     editor: CodeMirror.Editor,
     options: GraphQLHintOptions,
   ): IHints | undefined => {
-    const { schema, externalFragments, autocompleteOptions } = options;
-    if (!schema) {
-      return;
-    }
-
-    const cur = editor.getCursor();
-    const token = editor.getTokenAt(cur);
-
-    const tokenStart =
-      token.type !== null && /"|\w/.test(token.string[0])
-        ? token.start
-        : token.end;
-
-    const position = new Position(cur.line, tokenStart);
-
-    const rawResults = getAutocompleteSuggestions(
-      schema,
-      editor.getValue(),
-      position,
-      token,
-      externalFragments,
-      autocompleteOptions,
-    );
-
-    const results = {
-      list: rawResults.map(item => ({
-        // important! for when the label is different from the insert text
-        text: item?.rawInsert ?? item.label,
-        type: item.type,
-        description: item.documentation,
-        isDeprecated: item.isDeprecated,
-        deprecationReason: item.deprecationReason,
-      })),
-      from: { line: cur.line, ch: tokenStart },
-      to: { line: cur.line, ch: token.end },
-    };
-
-    if (results?.list && results.list.length > 0) {
-      results.from = CodeMirror.Pos(results.from.line, results.from.ch);
-      results.to = CodeMirror.Pos(results.to.line, results.to.ch);
-      CodeMirror.signal(editor, 'hasCompletion', editor, results, token);
-    }
-
-    return results;
+      throw new Error("STUB");
   },
 );
 // exporting here so we don't need to import the codemirror show-hint addon module (and its implementation)

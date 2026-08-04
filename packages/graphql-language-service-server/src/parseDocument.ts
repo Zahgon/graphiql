@@ -25,27 +25,5 @@ export async function parseDocument(
   graphQLFileExtensions: string[] = DEFAULT_SUPPORTED_GRAPHQL_EXTENSIONS,
   logger: Logger | NoopLogger = new NoopLogger(),
 ): Promise<CachedContent[]> {
-  // Check if the text content includes a GraphQL query.
-  // If the text doesn't include GraphQL queries, do not proceed.
-  const ext = extname(
-    uri,
-  ) as unknown as (typeof DEFAULT_SUPPORTED_EXTENSIONS)[number];
-  if (!text || text === '') {
-    return [];
-  }
-
-  if (fileExtensions.includes(ext)) {
-    const templates = await findGraphQLTags(text, ext, uri, logger);
-    return templates.map(({ template, range }) => ({ query: template, range }));
-  }
-  if (graphQLFileExtensions.includes(ext)) {
-    const query = text;
-    const lines = query.split('\n');
-    const range = new Range(
-      new Position(0, 0),
-      new Position(lines.length - 1, lines.at(-1)!.length - 1),
-    );
-    return [{ query, range }];
-  }
-  return [];
+    throw new Error("STUB");
 }

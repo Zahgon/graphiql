@@ -28,80 +28,7 @@ export class DiagnosticsAdapter {
     private defaults: MonacoGraphQLAPI,
     private _worker: WorkerAccessor,
   ) {
-    this._worker = _worker;
-    let onChangeTimeout: ReturnType<typeof setTimeout>;
-    const onModelAdd = (model: editor.IModel): void => {
-      const modeId = getModelLanguageId(model);
-      if (modeId !== this.defaults.languageId) {
-        // it is tempting to load JSON models we cared about here
-        // into the web worker, however setDiagnosticOptions() needs
-        // to be called here from the main process anyway, and the worker
-        // is already generating JSON schema itself!
-        return;
-      }
-      const modelUri = model.uri.toString();
-      // if the config changes, this adapter will be re-instantiated, so we only need to check this once
-      const jsonValidationForModel =
-        defaults.diagnosticSettings.validateVariablesJSON?.[modelUri];
-      // once on adding a model, this is also fired when schema or other config changes
-      onChangeTimeout = setTimeout(() => {
-        void this._doValidate(model.uri, modeId, jsonValidationForModel);
-      }, 400);
-
-      this._listener[modelUri] = model.onDidChangeContent(() => {
-        clearTimeout(onChangeTimeout);
-        onChangeTimeout = setTimeout(() => {
-          void this._doValidate(model.uri, modeId, jsonValidationForModel);
-        }, 400);
-      });
-    };
-
-    const onModelRemoved = (model: editor.IModel): void => {
-      editor.setModelMarkers(model, this.defaults.languageId, []);
-      const uriStr = model.uri.toString();
-      const listener = this._listener[uriStr];
-
-      if (listener) {
-        listener.dispose();
-        delete this._listener[uriStr];
-      }
-    };
-
-    this._disposables.push(
-      editor.onDidCreateModel(onModelAdd),
-      {
-        dispose() {
-          clearTimeout(onChangeTimeout);
-        },
-      },
-      editor.onWillDisposeModel(model => {
-        onModelRemoved(model);
-      }),
-      editor.onDidChangeModelLanguage(event => {
-        onModelRemoved(event.model);
-        onModelAdd(event.model);
-      }),
-      {
-        dispose: () => {
-          for (const listener of Object.values(this._listener)) {
-            listener.dispose();
-          }
-        },
-      },
-      defaults.onDidChange(() => {
-        for (const model of editor.getModels()) {
-          if (getModelLanguageId(model) === this.defaults.languageId) {
-            onModelRemoved(model);
-            onModelAdd(model);
-          }
-        }
-      }),
-    );
-    for (const model of editor.getModels()) {
-      if (getModelLanguageId(model) === this.defaults.languageId) {
-        onModelAdd(model);
-      }
-    }
+      throw new Error("STUB");
   }
 
   public dispose(): void {
@@ -116,52 +43,7 @@ export class DiagnosticsAdapter {
     languageId: string,
     variablesUris?: string[],
   ) {
-    const worker = await this._worker(resource);
-
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- to handle an edge case bug that happens when typing before the schema is present
-    if (!worker) {
-      return;
-    }
-
-    const diagnostics = await worker.doValidation(resource.toString());
-    editor.setModelMarkers(editor.getModel(resource)!, languageId, diagnostics);
-
-    if (variablesUris) {
-      // only import the JSON mode if users configure it
-      await import('monaco-editor/esm/vs/language/json/monaco.contribution.js');
-
-      if (!variablesUris.length) {
-        throw new Error('No variables URI strings provided to validate');
-      }
-      const jsonSchema = await worker.doGetVariablesJSONSchema(
-        resource.toString(),
-      );
-      if (!jsonSchema) {
-        return;
-      }
-
-      const schemaUri = Uri.file(
-        variablesUris[0]!.replace('.json', '-schema.json'),
-      ).toString();
-      const configResult = {
-        uri: schemaUri,
-        schema: jsonSchema,
-        fileMatch: variablesUris,
-      };
-      const currentSchemas =
-        languages.json.jsonDefaults.diagnosticsOptions.schemas?.filter(
-          s => s.uri !== schemaUri,
-        ) || [];
-
-      // TODO: export from api somehow?
-      languages.json.jsonDefaults.setDiagnosticsOptions({
-        schemaValidation: 'error',
-        validate: true,
-        ...this.defaults.diagnosticSettings.jsonDiagnosticSettings,
-        schemas: [...currentSchemas, configResult],
-        enableSchemaRequest: false,
-      });
-    }
+      throw new Error("STUB");
   }
 }
 
@@ -198,28 +80,13 @@ const kindMap: Record<lsCompletionItemKind, languages.CompletionItemKind> = {
 export function toCompletionItemKind(
   kind: lsCompletionItemKind,
 ): languages.CompletionItemKind {
-  return kind in kindMap ? kindMap[kind] : mKind.Text;
+    throw new Error("STUB");
 }
 
 export function toCompletion(
   entry: GraphQLWorkerCompletionItem,
 ): languages.CompletionItem {
-  const suggestions: languages.CompletionItem = {
-    // @ts-expect-error
-    range: entry.range,
-    kind: toCompletionItemKind(entry.kind!),
-    label: entry.label,
-    insertText: entry.insertText ?? entry.label,
-    insertTextRules: entry.insertText
-      ? languages.CompletionItemInsertTextRule.InsertAsSnippet
-      : undefined,
-    sortText: entry.sortText,
-    filterText: entry.filterText,
-    documentation: entry.documentation,
-    detail: entry.detail,
-    command: entry.command,
-  };
-  return suggestions;
+    throw new Error("STUB");
 }
 
 export class CompletionAdapter implements languages.CompletionItemProvider {
@@ -228,10 +95,7 @@ export class CompletionAdapter implements languages.CompletionItemProvider {
   }
 
   public get triggerCharacters(): string[] {
-    // removing /n character for now until we can
-    // re-introduce the behavior in a programmatic,
-    // context-aware fashion
-    return [':', '$', ' ', '(', '@'];
+      throw new Error("STUB");
   }
 
   async provideCompletionItems(
@@ -240,21 +104,7 @@ export class CompletionAdapter implements languages.CompletionItemProvider {
     _context: languages.CompletionContext,
     _token: monaco.CancellationToken,
   ): Promise<languages.CompletionList> {
-    try {
-      const worker = await this._worker(model.uri);
-      const completionItems = await worker.doComplete(
-        model.uri.toString(),
-        position,
-      );
-      return {
-        incomplete: true,
-        suggestions: completionItems.map(toCompletion),
-      };
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Error fetching completion items', err);
-      return { suggestions: [] };
-    }
+      throw new Error("STUB");
   }
 }
 
@@ -270,18 +120,7 @@ export class DocumentFormattingAdapter
     _options: languages.FormattingOptions,
     _token: monaco.CancellationToken,
   ) {
-    const worker = await this._worker(document.uri);
-
-    const formatted = await worker.doFormat(document.uri.toString());
-    if (!formatted) {
-      return [];
-    }
-    return [
-      {
-        range: document.getFullModelRange(),
-        text: formatted,
-      },
-    ];
+      throw new Error("STUB");
   }
 }
 
@@ -293,20 +132,7 @@ export class HoverAdapter implements languages.HoverProvider {
     position: monaco.Position,
     _token: monaco.CancellationToken,
   ): Promise<languages.Hover> {
-    const resource = model.uri;
-    const worker = await this._worker(model.uri);
-    const hoverItem = await worker.doHover(resource.toString(), position);
-
-    if (hoverItem) {
-      return {
-        range: hoverItem.range,
-        contents: [{ value: hoverItem.content as string }],
-      };
-    }
-
-    return {
-      contents: [],
-    };
+      throw new Error("STUB");
   }
 
   dispose() {}

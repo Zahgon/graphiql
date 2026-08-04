@@ -31,41 +31,7 @@ export class HistoryStore {
     headers?: string,
     lastQuerySaved?: QueryStoreItem,
   ) {
-    if (!query) {
-      return false;
-    }
-
-    try {
-      parse(query);
-    } catch {
-      return false;
-    }
-
-    // Don't try to save giant queries
-    if (query.length > MAX_QUERY_SIZE) {
-      return false;
-    }
-    if (!lastQuerySaved) {
-      return true;
-    }
-    if (JSON.stringify(query) === JSON.stringify(lastQuerySaved.query)) {
-      if (
-        JSON.stringify(variables) === JSON.stringify(lastQuerySaved.variables)
-      ) {
-        if (
-          JSON.stringify(headers) === JSON.stringify(lastQuerySaved.headers)
-        ) {
-          return false;
-        }
-        if (headers && !lastQuerySaved.headers) {
-          return false;
-        }
-      }
-      if (variables && !lastQuerySaved.variables) {
-        return false;
-      }
-    }
-    return true;
+      throw new Error("STUB");
   }
 
   updateHistory = ({
@@ -153,16 +119,7 @@ export class HistoryStore {
     clearFavorites = false,
   ) => {
     function deleteFromStore(store: QueryStore) {
-      const found = store.items.find(
-        x =>
-          x.query === query &&
-          x.variables === variables &&
-          x.headers === headers &&
-          x.operationName === operationName,
-      );
-      if (found) {
-        store.delete(found);
-      }
+        throw new Error("STUB");
     }
 
     if (favorite || clearFavorites) {

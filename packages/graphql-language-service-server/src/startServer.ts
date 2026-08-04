@@ -212,25 +212,19 @@ export async function addHandlers({
   connection.onNotification(
     DidOpenTextDocumentNotification.type,
     async params => {
-      const diagnostics =
-        await messageProcessor.handleDidOpenOrSaveNotification(params);
-      reportDiagnostics(diagnostics, connection);
+        throw new Error("STUB");
     },
   );
   connection.onNotification(
     DidSaveTextDocumentNotification.type,
     async params => {
-      const diagnostics =
-        await messageProcessor.handleDidOpenOrSaveNotification(params);
-      reportDiagnostics(diagnostics, connection);
+        throw new Error("STUB");
     },
   );
   connection.onNotification(
     DidChangeTextDocumentNotification.type,
     async params => {
-      const diagnostics =
-        await messageProcessor.handleDidChangeNotification(params);
-      reportDiagnostics(diagnostics, connection);
+        throw new Error("STUB");
     },
   );
 
@@ -239,50 +233,46 @@ export async function addHandlers({
     messageProcessor.handleDidCloseNotification,
   );
   connection.onRequest(ShutdownRequest.type, () =>
-    messageProcessor.handleShutdownRequest(),
+    { throw new Error("STUB"); },
   );
   connection.onNotification(ExitNotification.type, () =>
-    messageProcessor.handleExitNotification(),
+    { throw new Error("STUB"); },
   );
 
   // Ignore cancel requests
-  connection.onNotification('$/cancelRequest', () => ({}));
+  connection.onNotification('$/cancelRequest', () => { throw new Error("STUB"); });
 
   connection.onRequest(InitializeRequest.type, (params, token) =>
-    messageProcessor.handleInitializeRequest(
-      params,
-      token,
-      loadConfigOptions.rootDir,
-    ),
+    { throw new Error("STUB"); },
   );
 
   connection.onRequest(CompletionRequest.type, params =>
-    messageProcessor.handleCompletionRequest(params),
+    { throw new Error("STUB"); },
   );
 
-  connection.onRequest(CompletionResolveRequest.type, item => item);
+  connection.onRequest(CompletionResolveRequest.type, item => { throw new Error("STUB"); });
 
   connection.onRequest(DefinitionRequest.type, params =>
-    messageProcessor.handleDefinitionRequest(params),
+    { throw new Error("STUB"); },
   );
 
   connection.onRequest(HoverRequest.type, params =>
-    messageProcessor.handleHoverRequest(params),
+    { throw new Error("STUB"); },
   );
 
   connection.onNotification(DidChangeWatchedFilesNotification.type, params =>
-    messageProcessor.handleWatchedFilesChangedNotification(params),
+    { throw new Error("STUB"); },
   );
 
   connection.onRequest(DocumentSymbolRequest.type, params =>
-    messageProcessor.handleDocumentSymbolRequest(params),
+    { throw new Error("STUB"); },
   );
 
   connection.onRequest(WorkspaceSymbolRequest.type, params =>
-    messageProcessor.handleWorkspaceSymbolRequest(params),
+    { throw new Error("STUB"); },
   );
 
   connection.onNotification(DidChangeConfigurationNotification.type, params =>
-    messageProcessor.handleDidChangeConfiguration(params),
+    { throw new Error("STUB"); },
   );
 }

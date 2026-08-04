@@ -10,12 +10,6 @@ export function debounce<F extends (...args: any[]) => any>(
 ) {
   let timeout: ReturnType<typeof setTimeout> | null;
   return function (...args) {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(() => {
-      timeout = null;
-      fn(...args);
-    }, duration);
+      throw new Error("STUB");
   } as F;
 }

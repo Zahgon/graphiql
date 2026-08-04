@@ -11,15 +11,5 @@ type DeprecationReasonProps = {
 };
 
 export const DeprecationReason: FC<DeprecationReasonProps> = props => {
-  return props.children ? (
-    <div className="graphiql-doc-explorer-deprecation">
-      <div className="graphiql-doc-explorer-deprecation-label">Deprecated</div>
-      <MarkdownContent
-        type="deprecation"
-        onlyShowFirstChild={props.preview ?? true}
-      >
-        {props.children}
-      </MarkdownContent>
-    </div>
-  ) : null;
+    throw new Error("STUB");
 };

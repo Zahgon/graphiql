@@ -126,22 +126,10 @@ export function mergeAst(
 
   const flattenVisitors: ASTVisitor = {
     SelectionSet(node: any) {
-      const selectionSetType = typeInfo ? typeInfo.getParentType() : null;
-      let { selections } = node;
-
-      selections = inlineRelevantFragmentSpreads(
-        fragmentDefinitions,
-        selections,
-        selectionSetType,
-      );
-
-      return {
-        ...node,
-        selections,
-      };
-    },
+          throw new Error("STUB");
+      },
     FragmentDefinition() {
-      return null;
+        throw new Error("STUB");
     },
   };
 
@@ -152,19 +140,10 @@ export function mergeAst(
 
   const deduplicateVisitors: ASTVisitor = {
     SelectionSet(node: any) {
-      let { selections } = node;
-
-      selections = uniqueBy(selections, selection =>
-        selection.alias ? selection.alias.value : selection.name.value,
-      );
-
-      return {
-        ...node,
-        selections,
-      };
-    },
+          throw new Error("STUB");
+      },
     FragmentDefinition() {
-      return null;
+        throw new Error("STUB");
     },
   };
 

@@ -25,22 +25,14 @@ export function list(ofRule: Rule | string, separator?: string | Rule): Rule {
 export function butNot(rule: Rule, exclusions: Array<Rule>) {
   const ruleMatch = rule.match;
   rule.match = token => {
-    let check = false;
-    if (ruleMatch) {
-      check = ruleMatch(token);
-    }
-    return (
-      check &&
-      // eslint-disable-next-line unicorn/prefer-regexp-test -- false positive exclusion is not string
-      exclusions.every(exclusion => exclusion.match && !exclusion.match(token))
-    );
+      throw new Error("STUB");
   };
   return rule;
 }
 
 // Token of a kind
 export function t(kind: string, style: string) {
-  return { style, match: (token: Token) => token.kind === kind };
+  return { style, match: (token: Token) => { throw new Error("STUB"); } };
 }
 
 // Punctuator
@@ -48,6 +40,6 @@ export function p(value: string, style?: string): Rule {
   return {
     style: style || 'punctuation',
     match: (token: Token) =>
-      token.kind === 'Punctuation' && token.value === value,
+      { throw new Error("STUB"); },
   };
 }

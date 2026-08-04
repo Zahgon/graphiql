@@ -29,135 +29,41 @@ export class GraphQLWorker {
   }
 
   public async doValidation(uri: string) {
-    try {
-      const documentModel = this._getTextModel(uri);
-      const document = documentModel?.getValue();
-      if (!document) {
-        return [];
-      }
-      const graphqlDiagnostics = this._languageService.getDiagnostics(
-        uri,
-        document,
-      );
-      return graphqlDiagnostics.map(toMarkerData);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      return [];
-    }
+      throw new Error("STUB");
   }
 
   public async doComplete(
     uri: string,
     position: monaco.Position,
   ): Promise<GraphQLWorkerCompletionItem[]> {
-    try {
-      const documentModel = this._getTextModel(uri);
-      const document = documentModel?.getValue();
-      if (!document) {
-        return [];
-      }
-      const graphQLPosition = toGraphQLPosition(position);
-      const suggestions = this._languageService.getCompletion(
-        uri,
-        document,
-        graphQLPosition,
-      );
-      return suggestions.map(suggestion => toCompletion(suggestion));
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      return [];
-    }
+      throw new Error("STUB");
   }
 
   public async doHover(uri: string, position: monaco.Position) {
-    try {
-      const documentModel = this._getTextModel(uri);
-      const document = documentModel?.getValue();
-      if (!document) {
-        return null;
-      }
-      const graphQLPosition = toGraphQLPosition(position);
-      const hover = this._languageService.getHover(
-        uri,
-        document,
-        graphQLPosition,
-      );
-      const token = getTokenAtPosition(document, graphQLPosition);
-      return {
-        content: hover,
-        range: toMonacoRange(
-          new Range(
-            new Position(graphQLPosition.line, token.start),
-            new Position(graphQLPosition.line, token.end),
-          ),
-        ),
-      };
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      return null;
-    }
+      throw new Error("STUB");
   }
 
   public async doGetVariablesJSONSchema(uri: string): Promise<unknown> {
-    const documentModel = this._getTextModel(uri);
-    const document = documentModel?.getValue();
-    if (!documentModel || !document) {
-      return null;
-    }
-    const jsonSchema = this._languageService.getVariablesJSONSchema(
-      uri,
-      document,
-      { useMarkdownDescription: true },
-    );
-    if (jsonSchema) {
-      return {
-        ...jsonSchema,
-        $id: 'monaco://variables-schema.json',
-        title: 'GraphQL Variables',
-      };
-    }
-
-    return null;
+      throw new Error("STUB");
   }
 
   async doFormat(uri: string): Promise<string | null> {
-    const documentModel = this._getTextModel(uri);
-    const document = documentModel?.getValue();
-    if (!documentModel || !document) {
-      return null;
-    }
-    const prettierStandalone = await import('prettier/standalone');
-    const prettierGraphqlParser = await import('prettier/parser-graphql');
-
-    return prettierStandalone.format(document, {
-      parser: 'graphql',
-      plugins: [prettierGraphqlParser],
-      ...this._formattingOptions?.prettierConfig,
-    });
+      throw new Error("STUB");
   }
 
   /**
    * TODO: store this in a proper document cache in the language service
    */
   private _getTextModel(uri: string): monaco.worker.IMirrorModel | null {
-    const models = this._ctx.getMirrorModels();
-    for (const model of models) {
-      if (model.uri.toString() === uri) {
-        return model;
-      }
-    }
-    return null;
+      throw new Error("STUB");
   }
 
   public doUpdateSchema(schema: SchemaConfig) {
-    return this._languageService.updateSchema(schema);
+      throw new Error("STUB");
   }
 
   public doUpdateSchemas(schemas: SchemaConfig[]) {
-    return this._languageService.updateSchemas(schemas);
+      throw new Error("STUB");
   }
 }
 

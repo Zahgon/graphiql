@@ -42,7 +42,7 @@ export type ParserOptions = {
 
 export default function onlineParser(
   options: ParserOptions = {
-    eatWhitespace: stream => stream.eatWhile(isIgnored),
+    eatWhitespace: stream => { throw new Error("STUB"); },
     lexRules: LexRules,
     parseRules: ParseRules,
     editorConfig: {},

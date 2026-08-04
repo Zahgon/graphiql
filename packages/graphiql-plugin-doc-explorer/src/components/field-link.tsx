@@ -10,18 +10,5 @@ type FieldLinkProps = {
 };
 
 export const FieldLink: FC<FieldLinkProps> = ({ field }) => {
-  const { push } = useDocExplorerActions();
-
-  return (
-    <a
-      className="graphiql-doc-explorer-field-name"
-      onClick={event => {
-        event.preventDefault();
-        push({ name: field.name, def: field });
-      }}
-      href="#"
-    >
-      {field.name}
-    </a>
-  );
+    throw new Error("STUB");
 };

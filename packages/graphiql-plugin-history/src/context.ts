@@ -6,32 +6,7 @@ import {
 } from '@graphiql/toolkit';
 import { useGraphiQL, pick, createBoundedUseStore } from '@graphiql/react';
 
-const historyStore = createStore<HistoryStoreType>((set, get) => ({
-  historyStorage: null,
-  actions: {
-    addToHistory(operation) {
-      const { historyStorage } = get();
-      historyStorage?.updateHistory(operation);
-      set({}); // trigger rerender
-    },
-    editLabel(operation, index) {
-      const { historyStorage } = get();
-      historyStorage?.editLabel(operation, index);
-      set({}); // trigger rerender
-    },
-    toggleFavorite(operation) {
-      const { historyStorage } = get();
-      historyStorage?.toggleFavorite(operation);
-      set({}); // trigger rerender
-    },
-    setActive: item => item,
-    deleteFromHistory(item, clearFavorites) {
-      const { historyStorage } = get();
-      historyStorage?.deleteHistory(item, clearFavorites);
-      set({}); // trigger rerender
-    },
-  },
-}));
+const historyStore = createStore<HistoryStoreType>((set, get) => { throw new Error("STUB"); });
 
 type HistoryStoreType = {
   // Can be `null` if History plugin saved in `localStorage` as `visiblePlugin`
@@ -117,30 +92,7 @@ export const HistoryStore: FC<HistoryStoreProps> = ({
   maxHistoryLength = 20,
   children,
 }) => {
-  const { isFetching, tabs, activeTabIndex, storage } = useGraphiQL(
-    pick('isFetching', 'tabs', 'activeTabIndex', 'storage'),
-  );
-  const activeTab = tabs[activeTabIndex]!;
-  const historyStorage = new ToolkitHistoryStore(storage, maxHistoryLength);
-
-  useEffect(() => {
-    historyStore.setState({ historyStorage });
-  }, [historyStorage]); // eslint-disable-line react-hooks/exhaustive-deps -- false positive, code is optimized by React Compiler
-
-  useEffect(() => {
-    if (!isFetching) {
-      return;
-    }
-    const { addToHistory } = historyStore.getState().actions;
-    addToHistory({
-      query: activeTab.query ?? undefined,
-      variables: activeTab.variables ?? undefined,
-      headers: activeTab.headers ?? undefined,
-      operationName: activeTab.operationName ?? undefined,
-    });
-  }, [isFetching, activeTab]);
-
-  return children as ReactElement;
+    throw new Error("STUB");
 };
 
 const useHistoryStore = createBoundedUseStore(historyStore);
@@ -148,10 +100,10 @@ const useHistoryStore = createBoundedUseStore(historyStore);
 const EMPTY_ARRAY: QueryStoreItem[] = [];
 
 export const useHistory = () =>
-  useHistoryStore(state => state.historyStorage?.queries ?? EMPTY_ARRAY);
+  useHistoryStore(state => { throw new Error("STUB"); });
 
 /**
  * Actions are functions used to update values in your store. They are static and never change.
  * @see https://tkdodo.eu/blog/working-with-zustand#separate-actions-from-state
  */
-export const useHistoryActions = () => useHistoryStore(state => state.actions);
+export const useHistoryActions = () => useHistoryStore(state => { throw new Error("STUB"); });

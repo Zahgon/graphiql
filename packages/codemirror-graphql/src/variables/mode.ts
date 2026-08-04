@@ -25,25 +25,7 @@ import indent from '../utils/mode-indent';
  * better code intelligence.
  */
 CodeMirror.defineMode('graphql-variables', config => {
-  const parser = onlineParser({
-    eatWhitespace: stream => stream.eatSpace(),
-    lexRules: LexRules,
-    parseRules: ParseRules,
-    editorConfig: { tabSize: config.tabSize },
-  });
-
-  return {
-    config,
-    startState: parser.startState,
-    token: parser.token as unknown as CodeMirror.Mode<any>['token'], // TODO: Check if the types are indeed compatible
-    indent,
-    electricInput: /^\s*[}\]]/,
-    fold: 'brace',
-    closeBrackets: {
-      pairs: '[]{}""',
-      explode: '[]{}',
-    },
-  };
+    throw new Error("STUB");
 });
 
 /**
@@ -70,29 +52,7 @@ const ParseRules = {
   Document: [p('{'), list('Variable', opt(p(','))), p('}')],
   Variable: [namedKey('variable'), p(':'), 'Value'],
   Value(token: Token) {
-    switch (token.kind) {
-      case 'Number':
-        return 'NumberValue';
-      case 'String':
-        return 'StringValue';
-      case 'Punctuation':
-        switch (token.value) {
-          case '[':
-            return 'ListValue';
-          case '{':
-            return 'ObjectValue';
-        }
-        return null;
-      case 'Keyword':
-        switch (token.value) {
-          case 'true':
-          case 'false':
-            return 'BooleanValue';
-          case 'null':
-            return 'NullValue';
-        }
-        return null;
-    }
+      throw new Error("STUB");
   },
   NumberValue: [t('Number', 'number')],
   StringValue: [t('String', 'string')],
@@ -107,7 +67,7 @@ const ParseRules = {
 function namedKey(style: string) {
   return {
     style,
-    match: (token: Token) => token.kind === 'String',
+    match: (token: Token) => { throw new Error("STUB"); },
     update(state: State, token: Token) {
       state.name = token.value.slice(1, -1); // Remove quotes.
     },

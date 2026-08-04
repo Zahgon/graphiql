@@ -22,40 +22,5 @@ export const VariablesEditor: FC<VariablesEditorProps> = ({
   onEdit,
   ...props
 }) => {
-  const { setEditor, run, prettifyEditors, mergeQuery } = useGraphiQLActions();
-  const { initialVariables, uriInstanceId } = useGraphiQL(
-    pick('initialVariables', 'uriInstanceId'),
-  );
-  const ref = useRef<HTMLDivElement>(null!);
-  const monaco = useMonaco(state => state.monaco);
-  useChangeHandler(onEdit, STORAGE_KEY.variables, 'variables');
-  useEffect(() => {
-    if (!monaco) {
-      return;
-    }
-    const model = getOrCreateModel({
-      uri: `${uriInstanceId}${URI_NAME.variables}`,
-      value: initialVariables,
-    });
-    const editor = createEditor(ref, { model });
-    setEditor({ variableEditor: editor });
-    const disposables = [
-      editor.addAction({ ...KEY_BINDINGS.runQuery, run }),
-      editor.addAction({ ...KEY_BINDINGS.prettify, run: prettifyEditors }),
-      editor.addAction({ ...KEY_BINDINGS.mergeFragments, run: mergeQuery }),
-      editor,
-      model,
-    ];
-    return cleanupDisposables(disposables);
-  }, [monaco]); // eslint-disable-line react-hooks/exhaustive-deps -- only on mount
-
-  return (
-    <div
-      ref={ref}
-      tabIndex={0}
-      onKeyDown={onEditorContainerKeyDown}
-      {...props}
-      className={cn('graphiql-editor', props.className)}
-    />
-  );
+    throw new Error("STUB");
 };

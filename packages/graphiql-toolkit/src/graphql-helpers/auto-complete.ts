@@ -84,37 +84,7 @@ export function fillLeafs(
 // This function first looks for some common patterns, and falls back to
 // including all leaf-type fields.
 function defaultGetDefaultFieldNames(type: GraphQLType) {
-  // If this type cannot access fields, then return an empty set.
-  // if (!type.getFields) {
-  if (!('getFields' in type)) {
-    return [];
-  }
-
-  const fields = type.getFields();
-
-  // Is there an `id` field?
-  if (fields.id) {
-    return ['id'];
-  }
-
-  // Is there an `edges` field?
-  if (fields.edges) {
-    return ['edges'];
-  }
-
-  // Is there an `node` field?
-  if (fields.node) {
-    return ['node'];
-  }
-
-  // Include all leaf-type fields.
-  const leafFieldNames: Array<string> = [];
-  for (const fieldName of Object.keys(fields)) {
-    if (isLeafType(fields[fieldName].type)) {
-      leafFieldNames.push(fieldName);
-    }
-  }
-  return leafFieldNames;
+    throw new Error("STUB");
 }
 
 // Given a GraphQL type, and a function which produces field names, recursively
@@ -147,18 +117,7 @@ function buildSelectionSet(
   return {
     kind: Kind.SELECTION_SET,
     selections: fieldNames.map(fieldName => {
-      const fieldDef = namedType.getFields()[fieldName];
-      const fieldType = fieldDef ? fieldDef.type : null;
-      return {
-        kind: Kind.FIELD,
-        name: {
-          kind: Kind.NAME,
-          value: fieldName,
-        },
-        // we can use as here, because we already know that fieldType
-        // comes from an origin parameter
-        selectionSet: buildSelectionSet(fieldType!, getDefaultFieldNames),
-      };
+        throw new Error("STUB");
     }),
   };
 }

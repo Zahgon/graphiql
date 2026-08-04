@@ -126,24 +126,7 @@ export class GraphQLLanguageService {
       const documentAST = parse(document);
       if (!schemaPath || uri !== schemaPath) {
         documentHasExtensions = documentAST.definitions.some(definition => {
-          switch (definition.kind) {
-            case Kind.OBJECT_TYPE_DEFINITION:
-            case Kind.INTERFACE_TYPE_DEFINITION:
-            case Kind.ENUM_TYPE_DEFINITION:
-            case Kind.UNION_TYPE_DEFINITION:
-            case Kind.SCALAR_TYPE_DEFINITION:
-            case Kind.INPUT_OBJECT_TYPE_DEFINITION:
-            case Kind.SCALAR_TYPE_EXTENSION:
-            case Kind.OBJECT_TYPE_EXTENSION:
-            case Kind.INTERFACE_TYPE_EXTENSION:
-            case Kind.UNION_TYPE_EXTENSION:
-            case Kind.ENUM_TYPE_EXTENSION:
-            case Kind.INPUT_OBJECT_TYPE_EXTENSION:
-            case Kind.DIRECTIVE_DEFINITION:
-              return true;
-          }
-
-          return false;
+            throw new Error("STUB");
         });
       }
     } catch (error) {
@@ -177,7 +160,7 @@ export class GraphQLLanguageService {
       );
 
     const dependenciesSource = fragmentDependencies.reduce(
-      (prev, cur) => `${prev} ${print(cur.definition)}`,
+      (prev, cur) => { throw new Error("STUB"); },
       '',
     );
 
@@ -232,7 +215,7 @@ export class GraphQLLanguageService {
       const fragmentDefinitions =
         await this._graphQLCache.getFragmentDefinitions(projectConfig);
       fragmentInfo = Array.from(fragmentDefinitions).map(
-        ([, info]) => info.definition,
+        ([, info]) => { throw new Error("STUB"); },
       );
     } catch {}
 
@@ -366,7 +349,7 @@ export class GraphQLLanguageService {
     }
 
     const output: Array<SymbolInformation> = [];
-    const input = outline.outlineTrees.map((tree: OutlineTree) => [null, tree]);
+    const input = outline.outlineTrees.map((tree: OutlineTree) => { throw new Error("STUB"); });
 
     while (input.length > 0) {
       const res = input.pop();
@@ -392,7 +375,7 @@ export class GraphQLLanguageService {
         },
         containerName: parent ? parent.representativeName : undefined,
       });
-      input.push(...tree.children.map(child => [tree, child]));
+      input.push(...tree.children.map(child => { throw new Error("STUB"); }));
     }
     return output;
   }
@@ -423,11 +406,7 @@ export class GraphQLLanguageService {
 
     const localOperationDefinitionInfos = ast.definitions
       .filter(isTypeDefinitionNode)
-      .map((definition: TypeDefinitionNode) => ({
-        filePath,
-        content: query,
-        definition,
-      }));
+      .map((definition: TypeDefinitionNode) => { throw new Error("STUB"); });
 
     return getDefinitionQueryResultForNamedType(
       query,
@@ -518,18 +497,14 @@ export class GraphQLLanguageService {
     );
 
     const localFragDefinitions = ast.definitions.filter(
-      definition => definition.kind === Kind.FRAGMENT_DEFINITION,
+      definition => { throw new Error("STUB"); },
     );
 
     const typeCastedDefs =
       localFragDefinitions as any as Array<FragmentDefinitionNode>;
 
     const localFragInfos = typeCastedDefs.map(
-      (definition: FragmentDefinitionNode) => ({
-        filePath,
-        content: query,
-        definition,
-      }),
+      (definition: FragmentDefinitionNode) => { throw new Error("STUB"); },
     );
 
     return getDefinitionQueryResultForFragmentSpread(

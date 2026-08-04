@@ -10,9 +10,5 @@ type DirectiveProps = {
 };
 
 export const Directive: FC<DirectiveProps> = ({ directive }) => {
-  return (
-    <span className="graphiql-doc-explorer-directive">
-      @{directive.name.value}
-    </span>
-  );
+    throw new Error("STUB");
 };

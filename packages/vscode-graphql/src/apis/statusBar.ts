@@ -66,7 +66,7 @@ const statusBarActivationLanguageIds = [
 ];
 
 export const createStatusBar = () => {
-  return window.createStatusBarItem(StatusBarAlignment.Right, 0);
+    throw new Error("STUB");
 };
 
 export function initStatusBar(
@@ -74,76 +74,12 @@ export function initStatusBar(
   client: LanguageClient,
   editor: TextEditor | undefined,
 ) {
-  extensionStatus = Status.INIT;
-
-  // TODO: Make graphql-language-service-server throw relevant
-  // notifications. Currently, it does not throw "init" or "exit"
-  // and status bar is hard coded to all greens.
-
-  client.onNotification('init', _params => {
-    extensionStatus = Status.RUNNING;
-    serverRunning = true;
-    updateStatusBar(statusBarItem, editor);
-  });
-
-  client.onNotification('exit', _params => {
-    extensionStatus = Status.ERROR;
-    serverRunning = false;
-    updateStatusBar(statusBarItem, editor);
-  });
-
-  client.onDidChangeState(event => {
-    if (event.newState === State.Running) {
-      extensionStatus = Status.RUNNING;
-      serverRunning = true;
-    } else {
-      extensionStatus = Status.ERROR;
-      client.info('The graphql server has stopped running');
-      serverRunning = false;
-    }
-    updateStatusBar(statusBarItem, editor);
-  });
-
-  updateStatusBar(statusBarItem, editor);
-
-  window.onDidChangeActiveTextEditor((activeEditor: TextEditor | undefined) => {
-    // update the status if the server is running
-    updateStatusBar(statusBarItem, activeEditor);
-  });
+    throw new Error("STUB");
 }
 
 function updateStatusBar(
   statusBarItem: StatusBarItem,
   editor: TextEditor | undefined,
 ) {
-  extensionStatus = serverRunning ? Status.RUNNING : Status.ERROR;
-
-  // Support two different versions of the status bar UI,
-  // a modern version which uses the new API which lets us use the GraphQL logo and
-  // a legacy version which says 'graphql' in text.
-
-  const [major, minor] = version.split('.');
-  const userNewVersion =
-    Number(major) > 1 || (Number(major) === 1 && Number(minor) >= 65);
-  const statusBarUIElement = userNewVersion
-    ? statusBarUIElements
-    : oldStatusBarUIElements;
-  const message = userNewVersion ? '' : ' GraphQL';
-
-  const statusUI = statusBarUIElement[extensionStatus];
-  statusBarItem.text = `$(${statusUI.icon})${message}`;
-  statusBarItem.tooltip = statusUI.tooltip;
-  statusBarItem.command = 'vscode-graphql.showOutputChannel';
-  if ('color' in statusUI) {
-    statusBarItem.color = statusUI.color;
-  }
-
-  if (
-    editor &&
-    statusBarActivationLanguageIds.includes(editor.document.languageId)
-  ) {
-    statusBarItem.show();
-  } else {
-    statusBarItem.hide();
-  }
+    throw new Error("STUB");
 }

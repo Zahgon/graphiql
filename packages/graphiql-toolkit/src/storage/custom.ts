@@ -16,32 +16,5 @@ export type CreateLocalStorageOptions = {
 export function createLocalStorage({
   namespace,
 }: CreateLocalStorageOptions): Storage {
-  const storageKeyPrefix = `${namespace}:`;
-  const getStorageKey = (key: string) => `${storageKeyPrefix}${key}`;
-
-  const storage: Storage = {
-    setItem: (key, value) => localStorage.setItem(getStorageKey(key), value),
-    getItem: key => localStorage.getItem(getStorageKey(key)),
-    removeItem: key => localStorage.removeItem(getStorageKey(key)),
-    get length() {
-      let keys = 0;
-      for (const key in localStorage) {
-        if (key.indexOf(storageKeyPrefix) === 0) {
-          keys += 1;
-        }
-      }
-      return keys;
-    },
-
-    clear() {
-      // We only want to clear the namespaced items
-      for (const key in localStorage) {
-        if (key.indexOf(storageKeyPrefix) === 0) {
-          localStorage.removeItem(key);
-        }
-      }
-    },
-  };
-
-  return storage;
+    throw new Error("STUB");
 }

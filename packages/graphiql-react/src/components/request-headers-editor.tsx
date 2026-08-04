@@ -22,44 +22,5 @@ export const RequestHeadersEditor: FC<RequestHeadersEditorProps> = ({
   onEdit,
   ...props
 }) => {
-  const { setEditor, run, prettifyEditors, mergeQuery } = useGraphiQLActions();
-  const { initialHeaders, shouldPersistHeaders, uriInstanceId } = useGraphiQL(
-    pick('initialHeaders', 'shouldPersistHeaders', 'uriInstanceId'),
-  );
-  const ref = useRef<HTMLDivElement>(null!);
-  const monaco = useMonaco(state => state.monaco);
-  useChangeHandler(
-    onEdit,
-    shouldPersistHeaders ? STORAGE_KEY.headers : null,
-    'headers',
-  );
-  useEffect(() => {
-    if (!monaco) {
-      return;
-    }
-    const model = getOrCreateModel({
-      uri: `${uriInstanceId}${URI_NAME.requestHeaders}`,
-      value: initialHeaders,
-    });
-    const editor = createEditor(ref, { model });
-    setEditor({ headerEditor: editor });
-    const disposables = [
-      editor.addAction({ ...KEY_BINDINGS.runQuery, run }),
-      editor.addAction({ ...KEY_BINDINGS.prettify, run: prettifyEditors }),
-      editor.addAction({ ...KEY_BINDINGS.mergeFragments, run: mergeQuery }),
-      editor,
-      model,
-    ];
-    return cleanupDisposables(disposables);
-  }, [monaco]); // eslint-disable-line react-hooks/exhaustive-deps -- only on mount
-
-  return (
-    <div
-      ref={ref}
-      tabIndex={0}
-      onKeyDown={onEditorContainerKeyDown}
-      {...props}
-      className={cn('graphiql-editor', props.className)}
-    />
-  );
+    throw new Error("STUB");
 };

@@ -14,14 +14,6 @@ import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker.js?worker';
  */
 globalThis.MonacoEnvironment = {
   getWorker(_workerId: string, label: string) {
-    // eslint-disable-next-line no-console
-    console.info('setup-workers/vite', { label });
-    switch (label) {
-      case 'json':
-        return new JsonWorker();
-      case 'graphql':
-        return new GraphQLWorker();
-    }
-    return new EditorWorker();
-  },
+        throw new Error("STUB");
+    },
 };

@@ -123,32 +123,13 @@ export class MessageProcessor {
     tmpDir?: string;
     connection: Connection;
   }) {
-    if (config) {
-      this._providedConfig = config;
-    }
-    this._connection = connection;
-    this._logger = logger;
-    this._parser = async (text, uri) => {
-      const p = parser ?? parseDocument;
-      return p(text, uri, fileExtensions, graphqlFileExtensions, this._logger);
-    };
-    this._tmpDir = tmpDir || tmpdir();
-    this._tmpDirBase = path.join(this._tmpDir, 'graphql-language-service');
-    // use legacy mode by default for backwards compatibility
-    this._loadConfigOptions = { legacy: true, ...loadConfigOptions };
-    /**
-     * existsSync(this._tmpDirBase) with mkdirSync(this._tmpDirBase) provoke race condition, we use
-     * `{ recursive: true }` that way, if the directory already exists, it does not throw.
-     */
-    // if (!existsSync(this._tmpDirBase)) {
-    mkdirSync(this._tmpDirBase, { recursive: true });
-    // }
+      throw new Error("STUB");
   }
   get connection(): Connection {
-    return this._connection;
+      throw new Error("STUB");
   }
   set connection(connection: Connection) {
-    this._connection = connection;
+      throw new Error("STUB");
   }
 
   public async handleInitializeRequest(
@@ -222,27 +203,13 @@ export class MessageProcessor {
     this._rootPath = rootDir;
     this._loadConfigOptions = {
       ...Object.keys(this._settings?.load ?? {}).reduce((agg, key) => {
-        const value = this._settings?.load[key];
-        if (value === undefined || value === null) {
-          delete agg[key];
-        }
-        return agg;
+          throw new Error("STUB");
       }, this._settings.load ?? {}),
       rootDir,
     };
 
     const onSchemaChange = debounce(async (project: GraphQLProjectConfig) => {
-      const { cacheSchemaFileForLookup } =
-        this.getCachedSchemaSettings(project);
-      if (!cacheSchemaFileForLookup) {
-        return;
-      }
-      const unwrappedSchema = unwrapProjectSchema(project);
-      const sdlOnly = isProjectSDLOnly(unwrappedSchema);
-      if (sdlOnly) {
-        return;
-      }
-      return this.cacheConfigSchemaFile(project);
+        throw new Error("STUB");
     }, 400);
 
     try {
@@ -339,7 +306,7 @@ export class MessageProcessor {
 
     const fileMatch = configMatchers
       .filter(Boolean)
-      .some(v => uri.match(v)?.length);
+      .some(v => { throw new Error("STUB"); });
     if (fileMatch) {
       return fileMatch;
     }
@@ -427,16 +394,7 @@ export class MessageProcessor {
         if (project?.extensions?.languageService?.enableValidation !== false) {
           await Promise.all(
             contents.map(async ({ query, range }) => {
-              const results = await this._languageService.getDiagnostics(
-                query,
-                uri,
-                this._isRelayCompatMode(query),
-              );
-              if (results && results.length > 0) {
-                diagnostics.push(
-                  ...processDiagnosticsMessage(results, query, range),
-                );
-              }
+                throw new Error("STUB");
             }),
           );
         }
@@ -505,17 +463,7 @@ export class MessageProcessor {
         try {
           await Promise.all(
             contents.map(async ({ query, range }) => {
-              const results = await this._languageService.getDiagnostics(
-                query,
-                uri,
-                this._isRelayCompatMode(query),
-              );
-              if (results && results.length > 0) {
-                diagnostics.push(
-                  ...processDiagnosticsMessage(results, query, range),
-                );
-              }
-              // skip diagnostic errors, usually related to parsing incomplete fragments
+                throw new Error("STUB");
             }),
           );
         } catch {}
@@ -550,31 +498,7 @@ export class MessageProcessor {
   }
 
   public handleDidCloseNotification(params: DidCloseTextDocumentParams): void {
-    if (!this._isInitialized) {
-      return;
-    }
-    // For every `textDocument/didClose` event, delete the cached entry.
-    // This is to keep a low memory usage && switch the source of truth to
-    // the file on disk.
-    if (!params?.textDocument) {
-      throw new Error('`textDocument` is required.');
-    }
-    const { textDocument } = params;
-    const { uri } = textDocument;
-
-    if (this._textDocumentCache.has(uri)) {
-      this._textDocumentCache.delete(uri);
-    }
-    const project = this._graphQLCache.getProjectForFile(uri);
-
-    this._logger.log(
-      JSON.stringify({
-        type: 'usage',
-        messageType: 'textDocument/didClose',
-        projectName: project?.name,
-        fileName: uri,
-      }),
-    );
+      throw new Error("STUB");
   }
 
   public handleShutdownRequest(): void {
@@ -615,10 +539,7 @@ export class MessageProcessor {
     }
 
     const found = cachedDocument.contents.find(content => {
-      const currentRange = content.range;
-      if (currentRange?.containsPosition(toPosition(position))) {
-        return true;
-      }
+        throw new Error("STUB");
     });
 
     // If there is no GraphQL query in this file, return an empty result.
@@ -669,10 +590,7 @@ export class MessageProcessor {
     }
 
     const found = cachedDocument.contents.find(content => {
-      const currentRange = content.range;
-      if (currentRange?.containsPosition(toPosition(position))) {
-        return true;
-      }
+        throw new Error("STUB");
     });
 
     // If there is no GraphQL query in this file, return an empty result.
@@ -722,60 +640,14 @@ export class MessageProcessor {
   ): Promise<Array<PublishDiagnosticsParams | undefined> | null> {
     const resultsForChanges = Promise.all(
       params.changes.map(async (change: FileEvent) => {
-        const shouldSkip = await this._loadConfigOrSkip(change.uri);
-        if (shouldSkip) {
-          return { uri: change.uri, diagnostics: [] };
-        }
-        if (
-          change.type === FileChangeTypeKind.Created ||
-          change.type === FileChangeTypeKind.Changed
-        ) {
-          const { uri } = change;
-
-          try {
-            let diagnostics: Diagnostic[] = [];
-            const project = this._graphQLCache.getProjectForFile(uri);
-            if (project) {
-              // Important! Use system file uri not file path here!!!!
-              const { contents } = await this._parseAndCacheFile(uri, project);
-              if (
-                project?.extensions?.languageService?.enableValidation !== false
-              ) {
-                diagnostics = (
-                  await Promise.all(
-                    contents.map(async ({ query, range }) => {
-                      const results =
-                        await this._languageService.getDiagnostics(
-                          query,
-                          uri,
-                          this._isRelayCompatMode(query),
-                        );
-                      if (results && results.length > 0) {
-                        return processDiagnosticsMessage(results, query, range);
-                      }
-                      return [];
-                    }),
-                  )
-                ).reduce((left, right) => left.concat(right), diagnostics);
-              }
-
-              return { uri, diagnostics };
-            }
-            // skip diagnostics errors usually from incomplete files
-          } catch {}
-          return { uri, diagnostics: [] };
-        }
-        if (change.type === FileChangeTypeKind.Deleted) {
-          await this._updateFragmentDefinition(change.uri, []);
-          await this._updateObjectTypeDefinition(change.uri, []);
-        }
+          throw new Error("STUB");
       }),
     );
     this._logger.log(
       JSON.stringify({
         type: 'usage',
         messageType: 'workspace/didChangeWatchedFiles',
-        files: params.changes.map(change => change.uri),
+        files: params.changes.map(change => { throw new Error("STUB"); }),
       }),
     );
     return resultsForChanges;
@@ -800,10 +672,7 @@ export class MessageProcessor {
     }
 
     const found = cachedDocument.contents.find(content => {
-      const currentRange = content.range;
-      if (currentRange?.containsPosition(toPosition(position))) {
-        return true;
-      }
+        throw new Error("STUB");
     });
 
     // If there is no GraphQL query in this file, return an empty result.
@@ -832,8 +701,8 @@ export class MessageProcessor {
     try {
       visit(parse(query), {
         FragmentDefinition(node: FragmentDefinitionNode) {
-          inlineFragments.push(node.name.value);
-        },
+              throw new Error("STUB");
+          },
       });
     } catch {}
 
@@ -842,48 +711,8 @@ export class MessageProcessor {
 
     const formatted = result
       ? result.definitions.map(res => {
-          const defRange = res.range as Range;
-          if (parentRange && res.name) {
-            const isInline = inlineFragments.includes(res.name);
-            const isEmbedded = DEFAULT_SUPPORTED_EXTENSIONS.includes(
-              path.extname(res.path) as SupportedExtensionsEnum,
-            );
-
-            if (isEmbedded || isInline) {
-              const cachedDoc = this._getCachedDocument(
-                URI.parse(res.path).toString(),
-              );
-              const vOffset = isEmbedded
-                ? (cachedDoc?.contents[0].range?.start.line ?? 0)
-                : parentRange.start.line;
-
-              defRange.setStart(
-                (defRange.start.line += vOffset),
-                defRange.start.character,
-              );
-              defRange.setEnd(
-                (defRange.end.line += vOffset),
-                defRange.end.character,
-              );
-            }
-          }
-
-          if (locateCommand && result && result?.printedName) {
-            const locateResult = this._getCustomLocateResult(
-              project,
-              result,
-              locateCommand,
-            );
-
-            if (locateResult) {
-              return locateResult;
-            }
-          }
-          return {
-            uri: res.path,
-            range: defRange,
-          };
-        })
+          throw new Error("STUB");
+      })
       : [];
 
     this._logger.log(
@@ -1004,19 +833,10 @@ export class MessageProcessor {
       const symbols: SymbolInformation[] = [];
       await Promise.all(
         documents.map(async ([uri]) => {
-          const cachedDocument = this._getCachedDocument(uri);
-
-          if (!cachedDocument) {
-            return [];
-          }
-          const docSymbols = await this._languageService.getDocumentSymbols(
-            cachedDocument.contents[0].query,
-            uri,
-          );
-          symbols.push(...docSymbols);
+            throw new Error("STUB");
         }),
       );
-      return symbols.filter(symbol => symbol?.name?.includes(params.query));
+      return symbols.filter(symbol => { throw new Error("STUB"); });
     }
 
     return [];
@@ -1159,7 +979,7 @@ export class MessageProcessor {
     } else if (sdlOnly) {
       await Promise.all(
         unwrappedSchema.map(async schemaEntry =>
-          this._cacheSchemaFile(schemaEntry, project),
+          { throw new Error("STUB"); },
         ),
       );
     }
@@ -1228,30 +1048,13 @@ export class MessageProcessor {
       const documents = await project.getDocuments();
       const documentLocations = new Set(
         documents
-          .filter(doc => doc.location && doc.rawSDL)
-          .map(doc => doc.location!),
+          .filter(doc => { throw new Error("STUB"); })
+          .map(doc => { throw new Error("STUB"); }),
       );
 
       return Promise.all(
         Array.from(documentLocations).map(async loc => {
-          let filePath = loc;
-          if (!path.isAbsolute(filePath)) {
-            filePath = path.join(project.dirpath, loc);
-          }
-
-          // build full system URI path with protocol
-          const uri = URI.file(filePath).toString();
-
-          const fileContent = await readFile(filePath, 'utf-8');
-          // I would use the already existing graphql-config AST, but there are a few reasons we can't yet
-          const contents = await this._parser(fileContent, uri);
-          if (!contents[0]?.query) {
-            return;
-          }
-
-          await this._updateObjectTypeDefinition(uri, contents);
-          await this._updateFragmentDefinition(uri, contents);
-          await this._invalidateCache({ version: 1, uri }, uri, contents);
+            throw new Error("STUB");
         }),
       );
     } catch (err) {
@@ -1270,20 +1073,7 @@ export class MessageProcessor {
     if (config?.projects) {
       return Promise.all(
         Object.keys(config.projects).map(async projectName => {
-          const project = config.getProject(projectName);
-
-          await this._cacheSchemaFilesForProject(project);
-          if (project.documents?.length) {
-            await this._cacheDocumentFilesforProject(project);
-          } else {
-            this._logger.warn(
-              [
-                `No 'documents' config found for project: ${projectName}.`,
-                'Fragments and query documents cannot be detected.',
-                'LSP server will only perform some partial validation and SDL features.',
-              ].join('\n'),
-            );
-          }
+            throw new Error("STUB");
         }),
       );
     }
@@ -1315,18 +1105,7 @@ export class MessageProcessor {
   ): Promise<void> {
     await Promise.all(
       unwrapProjectSchema(project).map(async schema => {
-        const schemaFilePath = path.resolve(project.dirpath, schema);
-        const uriFilePath = URI.parse(uri).fsPath;
-
-        if (uriFilePath === schemaFilePath) {
-          try {
-            const file = await readFile(schemaFilePath, 'utf-8');
-            // only invalidate the schema cache if we can actually parse the file
-            // otherwise, leave the last valid one in place
-            parse(file, { noLocation: true });
-            this._graphQLCache.invalidateSchemaCacheForProject(project);
-          } catch {}
-        }
+          throw new Error("STUB");
       }),
     );
   }
@@ -1396,24 +1175,12 @@ export function processDiagnosticsMessage(
   const lastCharacterPosition = new Position(totalLines, lastLineLength);
   const processedResults = results.filter(diagnostic =>
     // @ts-ignore
-    diagnostic.range.end.lessThanOrEqualTo(lastCharacterPosition),
+    { throw new Error("STUB"); },
   );
 
   if (range) {
     const offset = range.start;
-    return processedResults.map(diagnostic => ({
-      ...diagnostic,
-      range: new Range(
-        new Position(
-          diagnostic.range.start.line + offset.line,
-          diagnostic.range.start.character,
-        ),
-        new Position(
-          diagnostic.range.end.line + offset.line,
-          diagnostic.range.end.character,
-        ),
-      ),
-    }));
+    return processedResults.map(diagnostic => { throw new Error("STUB"); });
   }
 
   return processedResults;

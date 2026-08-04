@@ -33,115 +33,7 @@ export async function findGraphQLTags(
   uri: string,
   logger: Logger | NoopLogger,
 ): Promise<TagResult[]> {
-  const result: TagResult[] = [];
-
-  let rangeMapper = (range: Range) => range;
-
-  const parser = parserMap[ext];
-  const parserResult = await parser(text, uri, logger);
-  if (!parserResult) {
-    return [];
-  }
-  if (parserResult?.rangeMapper) {
-    rangeMapper = parserResult.rangeMapper;
-  }
-
-  const { asts } = parserResult;
-  if (!asts?.length) {
-    return [];
-  }
-
-  const visitors = {
-    CallExpression(node: Expression) {
-      if (!('callee' in node)) {
-        return;
-      }
-      const { callee } = node;
-
-      if (
-        callee.type === 'Identifier' &&
-        getGraphQLTagName(callee) &&
-        'arguments' in node
-      ) {
-        const templateLiteral = node.arguments[0];
-        if (
-          templateLiteral &&
-          (templateLiteral.type === 'TemplateLiteral' ||
-            templateLiteral.type === 'TaggedTemplateExpression')
-        ) {
-          // @ts-expect-error
-          const parsed = parseTemplateLiteral(templateLiteral, rangeMapper);
-          if (parsed) {
-            result.push(parsed);
-          }
-        }
-      }
-
-      traverse(node, visitors);
-    },
-    TaggedTemplateExpression(node: TaggedTemplateExpression) {
-      const tagName = getGraphQLTagName(node.tag);
-      if (tagName) {
-        const { loc } = node.quasi.quasis[0];
-
-        const template =
-          node.quasi.quasis.length > 1
-            ? node.quasi.quasis
-                .map((quasi, i) =>
-                  i === node.quasi.quasis?.length - 1
-                    ? quasi.value.raw
-                    : getReplacementString(
-                        quasi.value.raw,
-                        node.quasi.quasis[i + 1].value.raw,
-                      ),
-                )
-                .join('')
-            : node.quasi.quasis[0].value.raw;
-        // handle template literals with N line expressions
-        if (loc && node.quasi.quasis.length > 1) {
-          const last = node.quasi.quasis.pop();
-          if (last?.loc?.end) {
-            loc.end = last.loc.end;
-          }
-        }
-        if (loc) {
-          const range = rangeMapper(
-            new Range(
-              new Position(loc.start.line - 1, loc.start.column),
-              new Position(loc.end.line - 1, loc.end.column),
-            ),
-          );
-
-          result.push({
-            tag: tagName,
-            template: template.endsWith('\n')
-              ? template.slice(0, template.length - 1)
-              : template,
-            range,
-          });
-        }
-      }
-    },
-    TemplateLiteral(node: TemplateLiteral) {
-      // check if the template literal is prefixed with #graphql
-      const hasGraphQLPrefix =
-        node.quasis[0].value.raw.startsWith('#graphql\n');
-      // check if the template expression has /* GraphQL */ comment
-      const hasGraphQLComment = Boolean(
-        node.leadingComments?.[0]?.value.match(/^\s*GraphQL\s*$/),
-      );
-      if (hasGraphQLPrefix || hasGraphQLComment) {
-        const parsed = parseTemplateLiteral(node, rangeMapper);
-        if (parsed) {
-          result.push(parsed);
-        }
-      }
-    },
-  };
-  for (const ast of asts) {
-    visit(ast, visitors);
-  }
-  return result;
+    throw new Error("STUB");
 }
 
 /*
@@ -158,66 +50,17 @@ export async function findGraphQLTags(
  5. default argument values for input types
 */
 const getReplacementString = (quasi: string, nextQuasi: string) => {
-  const trimmed = quasi.trimEnd();
-  const trimmedNext = nextQuasi.trimStart();
-  // only actually empty leaf field expressions
-  if (trimmed.endsWith('{') && trimmedNext.startsWith('}')) {
-    return quasi + '__typename';
-  }
-  return quasi;
+    throw new Error("STUB");
 };
 /**
  * Parses a Babel AST template literal into a GraphQL tag.
  */
 function parseTemplateLiteral(node: TemplateLiteral, rangeMapper: RangeMapper) {
-  const { loc } = node.quasis[0];
-  if (loc) {
-    // handle template literals with N line expressions
-
-    if (node.quasis.length > 1) {
-      const quasis = [...node.quasis];
-      const last = quasis.pop();
-      if (last?.loc?.end) {
-        loc.end = last.loc.end;
-      }
-    }
-    const template = node.quasis
-      .map((quasi, i) =>
-        i === node.quasis?.length - 1
-          ? quasi.value.raw
-          : getReplacementString(quasi.value.raw, node.quasis[i + 1].value.raw),
-      )
-      .join('');
-
-    const range = rangeMapper(
-      new Range(
-        new Position(loc.start.line - 1, loc.start.column),
-        new Position(loc.end.line - 1, loc.end.column),
-      ),
-    );
-
-    return {
-      tag: '',
-      template,
-      range,
-    };
-  }
+    throw new Error("STUB");
 }
 
 function getGraphQLTagName(tag: Expression): string | null {
-  if (tag.type === 'Identifier' && TAG_MAP[tag.name]) {
-    return tag.name;
-  }
-  if (
-    tag.type === 'MemberExpression' &&
-    tag.object.type === 'Identifier' &&
-    tag.object.name === 'graphql' &&
-    tag.property.type === 'Identifier' &&
-    tag.property.name === 'experimental'
-  ) {
-    return 'graphql.experimental';
-  }
-  return null;
+    throw new Error("STUB");
 }
 
 function visit(node: { [key: string]: any }, visitors: TagVisitors) {

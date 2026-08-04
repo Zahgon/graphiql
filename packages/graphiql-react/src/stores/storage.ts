@@ -20,4 +20,4 @@ type CreateStorageSlice = (
   initial: StorageSlice,
 ) => StateCreator<SlicesWithActions, [], [], StorageSlice>;
 
-export const createStorageSlice: CreateStorageSlice = initial => () => initial;
+export const createStorageSlice: CreateStorageSlice = initial => () => { throw new Error("STUB"); };

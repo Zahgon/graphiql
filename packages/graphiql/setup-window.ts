@@ -8,16 +8,7 @@ import { vi } from 'vitest';
 if (!window.matchMedia) {
   Object.defineProperty(window, 'matchMedia', {
     writable: false,
-    value: vi.fn().mockImplementation(query => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(), // deprecated
-      removeListener: vi.fn(), // deprecated
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
+    value: vi.fn().mockImplementation(query => { throw new Error("STUB"); }),
   });
 }
 

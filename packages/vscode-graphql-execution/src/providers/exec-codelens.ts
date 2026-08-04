@@ -27,26 +27,6 @@ export class GraphQLCodeLensProvider implements CodeLensProvider {
     // for some reason, ProviderResult<CodeLens[]> doesn't work here
     // anymore after upgrading types
   ): ProviderResult<[]> {
-    const literals: ExtractedTemplateLiteral[] =
-      this.sourceHelper.extractAllTemplateLiterals(document, [
-        'gql',
-        'graphql',
-        '/\\* GraphQL \\*/',
-      ]);
-    const results = literals.map(literal => {
-      return new CodeLens(
-        new Range(
-          new Position(literal.position.line, 0),
-          new Position(literal.position.line, 0),
-        ),
-        {
-          title: `Execute ${capitalize(literal.definition.operation)}`,
-          command: 'vscode-graphql-execution.contentProvider',
-          arguments: [literal],
-        },
-      );
-    });
-
-    return results as ProviderResult<[]>;
+      throw new Error("STUB");
   }
 }

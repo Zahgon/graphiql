@@ -112,91 +112,28 @@ function outlineTreeConverter(docText: string): OutlineTreeConverterType {
 
   return {
     Field(node: FieldNode) {
-      const tokenizedText = node.alias
-        ? [buildToken('plain', node.alias), buildToken('plain', ': ')]
-        : [];
-      tokenizedText.push(buildToken('plain', node.name));
-      return { tokenizedText, ...meta(node) };
-    },
-    OperationDefinition: (node: OperationDefinitionNode) => ({
-      tokenizedText: [
-        buildToken('keyword', node.operation),
-        buildToken('whitespace', ' '),
-        buildToken('class-name', node.name as unknown as string),
-      ],
-      ...meta(node),
-    }),
+          throw new Error("STUB");
+      },
+    OperationDefinition: (node: OperationDefinitionNode) => { throw new Error("STUB"); },
 
-    Document: (node: DocumentNode) => node.definitions,
+    Document: (node: DocumentNode) => { throw new Error("STUB"); },
     SelectionSet: (node: SelectionSetNode) =>
-      concatMap<SelectionNode>(node.selections, (child: SelectionNode) => {
-        return child.kind === Kind.INLINE_FRAGMENT ? child.selectionSet : child;
-      }),
-    Name: (node: NameNode) => node.value,
-    FragmentDefinition: (node: FragmentDefinitionNode) => ({
-      tokenizedText: [
-        buildToken('keyword', 'fragment'),
-        buildToken('whitespace', ' '),
-        buildToken('class-name', node.name),
-      ],
-      ...meta(node),
-    }),
-    InterfaceTypeDefinition: (node: InterfaceTypeDefinitionNode) => ({
-      tokenizedText: [
-        buildToken('keyword', 'interface'),
-        buildToken('whitespace', ' '),
-        buildToken('class-name', node.name),
-      ],
-      ...meta(node),
-    }),
-    EnumTypeDefinition: (node: EnumTypeDefinitionNode) => ({
-      tokenizedText: [
-        buildToken('keyword', 'enum'),
-        buildToken('whitespace', ' '),
-        buildToken('class-name', node.name),
-      ],
-      ...meta(node),
-    }),
-    EnumValueDefinition: (node: EnumValueDefinitionNode) => ({
-      tokenizedText: [buildToken('plain', node.name)],
-      ...meta(node),
-    }),
-    ObjectTypeDefinition: (node: ObjectTypeDefinitionNode) => ({
-      tokenizedText: [
-        buildToken('keyword', 'type'),
-        buildToken('whitespace', ' '),
-        buildToken('class-name', node.name),
-      ],
-      ...meta(node),
-    }),
-    InputObjectTypeDefinition: (node: ObjectTypeDefinitionNode) => ({
-      tokenizedText: [
-        buildToken('keyword', 'input'),
-        buildToken('whitespace', ' '),
-        buildToken('class-name', node.name),
-      ],
-      ...meta(node),
-    }),
-    FragmentSpread: (node: FragmentSpreadNode) => ({
-      tokenizedText: [
-        buildToken('plain', '...'),
-        buildToken('class-name', node.name),
-      ],
-      ...meta(node),
-    }),
+      { throw new Error("STUB"); },
+    Name: (node: NameNode) => { throw new Error("STUB"); },
+    FragmentDefinition: (node: FragmentDefinitionNode) => { throw new Error("STUB"); },
+    InterfaceTypeDefinition: (node: InterfaceTypeDefinitionNode) => { throw new Error("STUB"); },
+    EnumTypeDefinition: (node: EnumTypeDefinitionNode) => { throw new Error("STUB"); },
+    EnumValueDefinition: (node: EnumValueDefinitionNode) => { throw new Error("STUB"); },
+    ObjectTypeDefinition: (node: ObjectTypeDefinitionNode) => { throw new Error("STUB"); },
+    InputObjectTypeDefinition: (node: ObjectTypeDefinitionNode) => { throw new Error("STUB"); },
+    FragmentSpread: (node: FragmentSpreadNode) => { throw new Error("STUB"); },
     InputValueDefinition(node: InputValueDefinitionNode) {
-      return {
-        tokenizedText: [buildToken('plain', node.name)],
-        ...meta(node),
-      };
+        throw new Error("STUB");
     },
     FieldDefinition(node: FieldDefinitionNode) {
-      return {
-        tokenizedText: [buildToken('plain', node.name)],
-        ...meta(node),
-      };
+        throw new Error("STUB");
     },
-    InlineFragment: (node: InlineFragmentNode) => node.selectionSet,
+    InlineFragment: (node: InlineFragmentNode) => { throw new Error("STUB"); },
   };
 }
 

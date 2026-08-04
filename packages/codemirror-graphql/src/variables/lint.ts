@@ -49,30 +49,7 @@ CodeMirror.registerHelper(
     options: GraphQLVariableLintOptions,
     editor: CodeMirror.Editor,
   ) => {
-    // If there's no text, do nothing.
-    if (!text) {
-      return [];
-    }
-
-    // First, linter needs to determine if there are any parsing errors.
-    let ast;
-    try {
-      ast = jsonParse(text);
-    } catch (error) {
-      if (error instanceof JSONSyntaxError) {
-        return [lintError(editor, error.position, error.message)];
-      }
-      throw error;
-    }
-
-    // If there are not yet known variables, do nothing.
-    const { variableToType } = options;
-    if (!variableToType) {
-      return [];
-    }
-
-    // Then highlight any issues with the provided variables.
-    return validateVariables(editor, variableToType, ast);
+      throw new Error("STUB");
   },
 );
 
@@ -135,7 +112,7 @@ function validateValue(
     const itemType = type.ofType;
     if (valueAST.kind === 'Array') {
       const values = (valueAST as ParseArrayOutput).values || [];
-      return mapCat(values, item => validateValue(itemType, item));
+      return mapCat(values, item => { throw new Error("STUB"); });
     }
     return validateValue(itemType, valueAST);
   }
@@ -151,20 +128,7 @@ function validateValue(
     const fieldErrors: any[][] = mapCat(
       (valueAST as ParseObjectOutput).members,
       member => {
-        // TODO: Can't figure out the right type here
-        const fieldName = member?.key?.value;
-        providedFields[fieldName] = true;
-        const inputField = type.getFields()[fieldName];
-        if (!inputField) {
-          return [
-            [
-              member.key,
-              `Type "${type}" does not have a field "${fieldName}".`,
-            ],
-          ];
-        }
-        const fieldType = inputField ? inputField.type : undefined;
-        return validateValue(fieldType, member.value);
+          throw new Error("STUB");
       },
     );
 

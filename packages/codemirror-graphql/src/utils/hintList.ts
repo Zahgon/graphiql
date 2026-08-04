@@ -37,27 +37,22 @@ export default function hintList(
 // provide a concise list.
 function filterAndSortList(list: IHint[], text: string) {
   if (!text) {
-    return filterNonEmpty(list, entry => !entry.isDeprecated);
+    return filterNonEmpty(list, entry => { throw new Error("STUB"); });
   }
 
-  const byProximity = list.map(entry => ({
-    proximity: getProximity(normalizeText(entry.text), text),
-    entry,
-  }));
+  const byProximity = list.map(entry => { throw new Error("STUB"); });
 
   const conciseMatches = filterNonEmpty(
-    filterNonEmpty(byProximity, pair => pair.proximity <= 2),
-    pair => !pair.entry.isDeprecated,
+    filterNonEmpty(byProximity, pair => { throw new Error("STUB"); }),
+    pair => { throw new Error("STUB"); },
   );
 
   const sortedMatches = conciseMatches.sort(
     (a, b) =>
-      (a.entry.isDeprecated ? 1 : 0) - (b.entry.isDeprecated ? 1 : 0) ||
-      a.proximity - b.proximity ||
-      a.entry.text.length - b.entry.text.length,
+      { throw new Error("STUB"); },
   );
 
-  return sortedMatches.map(pair => pair.entry);
+  return sortedMatches.map(pair => { throw new Error("STUB"); });
 }
 
 // Filters the array by the predicate, unless it results in an empty array,

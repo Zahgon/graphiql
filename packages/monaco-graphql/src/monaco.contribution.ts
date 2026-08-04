@@ -23,7 +23,5 @@ export { LANGUAGE_ID };
 // here is the only place where we
 // initialize the mode `onLanguage`
 languages.onLanguage(LANGUAGE_ID, () => {
-  const api = initializeMode();
-
-  (languages as any).graphql = { api };
+    throw new Error("STUB");
 });

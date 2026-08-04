@@ -57,68 +57,7 @@ CodeMirror.registerHelper(
   'info',
   'graphql',
   (token: CodeMirror.Token, options: GraphQLInfoOptions) => {
-    if (!options.schema || !token.state) {
-      return;
-    }
-    const { kind, step } = token.state;
-    const typeInfo = getTypeInfo(options.schema, token.state);
-    // Given a Schema and a Token, produce the contents of an info tooltip.
-    // To do this, create a div element that we will render "into" and then pass
-    // it to various rendering functions.
-    if (
-      (kind === 'Field' && step === 0 && typeInfo.fieldDef) ||
-      (kind === 'AliasedField' && step === 2 && typeInfo.fieldDef) ||
-      (kind === 'ObjectField' && step === 0 && typeInfo.fieldDef)
-    ) {
-      const header = document.createElement('div');
-      header.className = 'CodeMirror-info-header';
-      renderField(header, typeInfo, options);
-      const into = document.createElement('div');
-      into.append(header);
-      renderDescription(into, options, typeInfo.fieldDef as any);
-      return into;
-    }
-
-    if (kind === 'Directive' && step === 1 && typeInfo.directiveDef) {
-      const header = document.createElement('div');
-      header.className = 'CodeMirror-info-header';
-      renderDirective(header, typeInfo, options);
-      const into = document.createElement('div');
-      into.append(header);
-      renderDescription(into, options, typeInfo.directiveDef);
-      return into;
-    }
-    if (kind === 'Argument' && step === 0 && typeInfo.argDef) {
-      const header = document.createElement('div');
-      header.className = 'CodeMirror-info-header';
-      renderArg(header, typeInfo, options);
-      const into = document.createElement('div');
-      into.append(header);
-      renderDescription(into, options, typeInfo.argDef);
-      return into;
-    }
-    if (kind === 'EnumValue' && typeInfo.enumValue?.description) {
-      const header = document.createElement('div');
-      header.className = 'CodeMirror-info-header';
-      renderEnumValue(header, typeInfo, options);
-      const into = document.createElement('div');
-      into.append(header);
-      renderDescription(into, options, typeInfo.enumValue);
-      return into;
-    }
-    if (
-      kind === 'NamedType' &&
-      typeInfo.type &&
-      (typeInfo.type as GraphQLObjectType).description
-    ) {
-      const header = document.createElement('div');
-      header.className = 'CodeMirror-info-header';
-      renderType(header, typeInfo, options, typeInfo.type);
-      const into = document.createElement('div');
-      into.append(header);
-      renderDescription(into, options, typeInfo.type);
-      return into;
-    }
+      throw new Error("STUB");
   },
 );
 
@@ -295,10 +234,7 @@ function text(
       // want clicking the node to navigate anywhere.
       node.href = 'javascript:void 0'; // eslint-disable-line no-script-url
       node.addEventListener('click', (e: MouseEvent) => {
-        // Although an href of 'javascript:void 0' should never navigate away from the page,
-        //   that is not always the case: https://github.com/graphql/graphiql/issues/3565
-        e.preventDefault();
-        onClick(ref, e);
+          throw new Error("STUB");
       });
     } else {
       node = document.createElement('span');

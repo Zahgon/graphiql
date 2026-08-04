@@ -15,40 +15,7 @@ interface ToolbarButtonProps extends ComponentPropsWithoutRef<'button'> {
 
 export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
   ({ label, onClick, ...props }, ref) => {
-    const [error, setError] = useState<Error | null>(null);
-    const handleClick: MouseEventHandler<HTMLButtonElement> = event => {
-      try {
-        // Optional chaining inside try-catch isn't supported yet by react-compiler
-        if (onClick) {
-          onClick(event);
-        }
-        setError(null);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err
-            : new Error(`Toolbar button click failed: ${err}`),
-        );
-      }
-    };
-
-    return (
-      <Tooltip label={label}>
-        <UnStyledButton
-          {...props}
-          ref={ref}
-          type="button"
-          className={cn(
-            'graphiql-toolbar-button',
-            error && 'error',
-            props.className,
-          )}
-          onClick={handleClick}
-          aria-label={error ? error.message : label}
-          aria-invalid={error ? 'true' : props['aria-invalid']}
-        />
-      </Tooltip>
-    );
-  },
+        throw new Error("STUB");
+    },
 );
 ToolbarButton.displayName = 'ToolbarButton';

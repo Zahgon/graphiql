@@ -34,32 +34,22 @@ export const History: FC = () => {
   // original index in case multiple items share the same label so we can edit the correct item
   let items = all
     .slice()
-    .map((item, i) => ({ ...item, index: i }))
+    .map((item, i) => { throw new Error("STUB"); })
     .reverse();
-  const favorites = items.filter(item => item.favorite);
+  const favorites = items.filter(item => { throw new Error("STUB"); });
   if (favorites.length) {
-    items = items.filter(item => !item.favorite);
+    items = items.filter(item => { throw new Error("STUB"); });
   }
 
   const [clearStatus, setClearStatus] = useState<'success' | 'error' | null>(
     null,
   );
   useEffect(() => {
-    if (clearStatus) {
-      // reset the button after a couple seconds
-      setTimeout(() => {
-        setClearStatus(null);
-      }, 2000);
-    }
+      throw new Error("STUB");
   }, [clearStatus]);
 
   const handleClearStatus = () => {
-    try {
-      handleDelete(items, deleteFromHistory);
-      setClearStatus('success');
-    } catch {
-      setClearStatus('error');
-    }
+      throw new Error("STUB");
   };
   const hasFavorites = Boolean(favorites.length);
   const hasItems = Boolean(items.length);
@@ -85,9 +75,7 @@ export const History: FC = () => {
 
       {hasFavorites && (
         <ul className="graphiql-history-items">
-          {favorites.map(item => (
-            <HistoryItem item={item} key={item.index} />
-          ))}
+          {favorites.map(item => { throw new Error("STUB"); })}
         </ul>
       )}
 
@@ -97,9 +85,7 @@ export const History: FC = () => {
 
       {hasItems && (
         <ul className="graphiql-history-items">
-          {items.map(item => (
-            <HistoryItem item={item} key={item.index} />
-          ))}
+          {items.map(item => { throw new Error("STUB"); })}
         </ul>
       )}
     </section>
@@ -111,146 +97,13 @@ type QueryHistoryItemProps = {
 };
 
 export const HistoryItem: FC<QueryHistoryItemProps> = props => {
-  const { editLabel, toggleFavorite, deleteFromHistory, setActive } =
-    useHistoryActions();
-  const { headerEditor, queryEditor, variableEditor } = useGraphiQL(
-    pick('headerEditor', 'queryEditor', 'variableEditor'),
-  );
-  const inputRef = useRef<HTMLInputElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const [isEditable, setIsEditable] = useState(false);
-
-  useEffect(() => {
-    if (isEditable) {
-      inputRef.current?.focus();
-    }
-  }, [isEditable]);
-
-  const displayName =
-    props.item.label ||
-    props.item.operationName ||
-    formatQuery(props.item.query);
-
-  const handleSave = () => {
-    setIsEditable(false);
-    const { index, ...item } = props.item;
-    editLabel({ ...item, label: inputRef.current?.value }, index);
-  };
-
-  const handleClose = () => {
-    setIsEditable(false);
-  };
-
-  const handleEditLabel: MouseEventHandler<HTMLButtonElement> = e => {
-    e.stopPropagation();
-    setIsEditable(true);
-  };
-
-  const handleHistoryItemClick: MouseEventHandler<HTMLButtonElement> = () => {
-    const { query, variables, headers } = props.item;
-    queryEditor?.setValue(query ?? '');
-    variableEditor?.setValue(variables ?? '');
-    headerEditor?.setValue(headers ?? '');
-    setActive(props.item);
-  };
-
-  const handleDeleteItemFromHistory: MouseEventHandler<
-    HTMLButtonElement
-  > = e => {
-    e.stopPropagation();
-    deleteFromHistory(props.item);
-  };
-
-  const handleToggleFavorite: MouseEventHandler<HTMLButtonElement> = e => {
-    e.stopPropagation();
-    toggleFavorite(props.item);
-  };
-
-  return (
-    <li className={cn('graphiql-history-item', isEditable && 'editable')}>
-      {isEditable ? (
-        <>
-          <input
-            type="text"
-            defaultValue={props.item.label}
-            ref={inputRef}
-            onKeyDown={e => {
-              if (e.key === 'Esc') {
-                setIsEditable(false);
-              } else if (e.key === 'Enter') {
-                setIsEditable(false);
-                editLabel({ ...props.item, label: e.currentTarget.value });
-              }
-            }}
-            placeholder="Type a label"
-          />
-          <UnStyledButton type="button" ref={buttonRef} onClick={handleSave}>
-            Save
-          </UnStyledButton>
-          <UnStyledButton type="button" ref={buttonRef} onClick={handleClose}>
-            <CloseIcon />
-          </UnStyledButton>
-        </>
-      ) : (
-        <>
-          <Tooltip label="Set active">
-            <UnStyledButton
-              type="button"
-              className="graphiql-history-item-label"
-              onClick={handleHistoryItemClick}
-              aria-label="Set active"
-            >
-              {displayName}
-            </UnStyledButton>
-          </Tooltip>
-          <Tooltip label="Edit label">
-            <UnStyledButton
-              type="button"
-              className="graphiql-history-item-action"
-              onClick={handleEditLabel}
-              aria-label="Edit label"
-            >
-              <PenIcon aria-hidden="true" />
-            </UnStyledButton>
-          </Tooltip>
-          <Tooltip
-            label={props.item.favorite ? 'Remove favorite' : 'Add favorite'}
-          >
-            <UnStyledButton
-              type="button"
-              className="graphiql-history-item-action"
-              onClick={handleToggleFavorite}
-              aria-label={
-                props.item.favorite ? 'Remove favorite' : 'Add favorite'
-              }
-            >
-              {props.item.favorite ? (
-                <StarFilledIcon aria-hidden="true" />
-              ) : (
-                <StarIcon aria-hidden="true" />
-              )}
-            </UnStyledButton>
-          </Tooltip>
-          <Tooltip label="Delete from history">
-            <UnStyledButton
-              type="button"
-              className="graphiql-history-item-action"
-              onClick={handleDeleteItemFromHistory}
-              aria-label="Delete from history"
-            >
-              <TrashIcon aria-hidden="true" />
-            </UnStyledButton>
-          </Tooltip>
-        </>
-      )}
-    </li>
-  );
+    throw new Error("STUB");
 };
 
 export function formatQuery(query?: string) {
   return query
     ?.split('\n')
-    .map(line => line.replace(/#(.*)/, ''))
+    .map(line => { throw new Error("STUB"); })
     .join(' ')
     .replaceAll('{', ' { ')
     .replaceAll('}', ' } ')

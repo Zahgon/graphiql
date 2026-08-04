@@ -21,7 +21,7 @@ function handleSingleError(error: unknown) {
 export function formatError(error: unknown): string {
   if (Array.isArray(error)) {
     return stringify({
-      errors: error.map(e => handleSingleError(e)),
+      errors: error.map(e => { throw new Error("STUB"); }),
     });
   }
   return stringify({ errors: [handleSingleError(error)] });

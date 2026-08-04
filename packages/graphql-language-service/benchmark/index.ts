@@ -37,7 +37,7 @@ const runSplitTest = (name: string, schema: string) => {
     suite.add({
       maxTime: 0.1,
       onStart() {
-        prevState = { ...state };
+          throw new Error("STUB");
       },
       fn() {
         const stream = new CharacterStream(line);
@@ -55,8 +55,7 @@ const runSplitTest = (name: string, schema: string) => {
       },
       onError: console.log,
       onComplete(e) {
-        state = completeState;
-        stats.push(e.target.stats);
+          throw new Error("STUB");
       },
     });
   }
@@ -67,12 +66,8 @@ const runSplitTest = (name: string, schema: string) => {
 
   const results = stats.reduce(
     (result, stat) => {
-      result.mean += stat.mean / stats.length;
-      result.rme += stat.rme / stats.length;
-      result.variance += stat.variance / stats.length;
-
-      return result;
-    },
+          throw new Error("STUB");
+      },
     { mean: 0, variance: 0, rme: 0 },
   );
 
@@ -81,22 +76,14 @@ const runSplitTest = (name: string, schema: string) => {
 
 const runWholeTest = (name: string, schema: string) => {
   const suite = new Benchmark.Suite('', {
-    onComplete: (e: any) => printResult(e.target.stats, name, schema),
+    onComplete: (e: any) => { throw new Error("STUB"); },
   });
 
   const parser = onlineParser();
   const state: any = parser.startState();
 
   suite.add(() => {
-    const stream = new CharacterStream(schema);
-
-    while (!stream.eol()) {
-      parser.token(stream, state);
-      if (state.kind === 'Invalid') {
-        console.log(state.kind);
-        throw new Error('Invalid');
-      }
-    }
+      throw new Error("STUB");
   });
 
   console.log(`Started test suite: ${name}`);
@@ -105,7 +92,7 @@ const runWholeTest = (name: string, schema: string) => {
 
 const runGraphqlParserTest = (name: string, schema: string) => {
   const suite = new Benchmark.Suite('', {
-    onComplete: (e: any) => printResult(e.target.stats, name, schema),
+    onComplete: (e: any) => { throw new Error("STUB"); },
   });
 
   suite.add({

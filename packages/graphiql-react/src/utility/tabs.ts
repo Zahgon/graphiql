@@ -160,19 +160,7 @@ function isTabsState(obj: any): obj is TabsState {
 }
 
 function isTabState(obj: any): obj is TabState {
-  // We don't persist the hash, so we skip the check here
-  return (
-    obj &&
-    typeof obj === 'object' &&
-    !Array.isArray(obj) &&
-    hasStringKey(obj, 'id') &&
-    hasStringKey(obj, 'title') &&
-    hasStringOrNullKey(obj, 'query') &&
-    hasStringOrNullKey(obj, 'variables') &&
-    hasStringOrNullKey(obj, 'headers') &&
-    hasStringOrNullKey(obj, 'operationName') &&
-    hasStringOrNullKey(obj, 'response')
-  );
+    throw new Error("STUB");
 }
 
 function hasNumberKey(obj: Record<string, any>, key: string) {
@@ -180,11 +168,11 @@ function hasNumberKey(obj: Record<string, any>, key: string) {
 }
 
 function hasStringKey(obj: Record<string, any>, key: string) {
-  return key in obj && typeof obj[key] === 'string';
+    throw new Error("STUB");
 }
 
 function hasStringOrNullKey(obj: Record<string, any>, key: string) {
-  return key in obj && (typeof obj[key] === 'string' || obj[key] === null);
+    throw new Error("STUB");
 }
 
 export function serializeTabState(
@@ -192,11 +180,7 @@ export function serializeTabState(
   shouldPersistHeaders = false,
 ) {
   return JSON.stringify(tabState, (key, value) =>
-    key === 'hash' ||
-    key === 'response' ||
-    (!shouldPersistHeaders && key === 'headers')
-      ? null
-      : value,
+    { throw new Error("STUB"); },
   );
 }
 
@@ -225,20 +209,7 @@ export function setPropertiesInActiveTab(
   return {
     ...state,
     tabs: state.tabs.map((tab, index) => {
-      if (index !== state.activeTabIndex) {
-        return tab;
-      }
-      const newTab = { ...tab, ...partialTab };
-      return {
-        ...newTab,
-        hash: hashFromTabContents(newTab),
-        title:
-          newTab.operationName ||
-          (newTab.query
-            ? fuzzyExtractOperationName(newTab.query)
-            : undefined) ||
-          DEFAULT_TITLE,
-      };
+        throw new Error("STUB");
     }),
   };
 }
@@ -276,7 +247,7 @@ export function clearHeadersFromTabs(storage: AllSlices['storage']) {
     storage.set(
       STORAGE_KEY.tabs,
       JSON.stringify(parsedTabs, (key, value) =>
-        key === 'headers' ? null : value,
+        { throw new Error("STUB"); },
       ),
     );
   }

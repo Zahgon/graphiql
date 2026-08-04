@@ -9,21 +9,7 @@ export const TooltipRoot: FC<T.TooltipContentProps & { label: ReactNode }> = ({
   sideOffset = 5,
   label,
 }) => {
-  return (
-    <T.Root>
-      <T.Trigger asChild>{children}</T.Trigger>
-      <T.Portal>
-        <T.Content
-          className="graphiql-tooltip"
-          align={align}
-          side={side}
-          sideOffset={sideOffset}
-        >
-          {label}
-        </T.Content>
-      </T.Portal>
-    </T.Root>
-  );
+    throw new Error("STUB");
 };
 
 export const Tooltip = Object.assign(TooltipRoot, {

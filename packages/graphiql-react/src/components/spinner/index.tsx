@@ -5,11 +5,5 @@ import './index.css';
 export const Spinner = forwardRef<
   HTMLDivElement,
   ComponentPropsWithoutRef<'div'>
->((props, ref) => (
-  <div
-    {...props}
-    ref={ref}
-    className={cn('graphiql-spinner', props.className)}
-  />
-));
+>((props, ref) => { throw new Error("STUB"); });
 Spinner.displayName = 'Spinner';

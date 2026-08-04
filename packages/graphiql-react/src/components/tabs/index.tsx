@@ -10,55 +10,20 @@ interface TabProps extends ComponentPropsWithoutRef<typeof Reorder.Item> {
 }
 
 const TabRoot = forwardRef<HTMLLIElement, TabProps>(
-  ({ isActive, value, children, className, ...props }, ref) => (
-    <Reorder.Item
-      {...props}
-      ref={ref}
-      value={value}
-      aria-selected={isActive}
-      dragElastic={false} // Prevent over scrolling of container
-      role="tab"
-      className={cn(
-        'graphiql-tab',
-        isActive && 'graphiql-tab-active',
-        className,
-      )}
-    >
-      {children}
-    </Reorder.Item>
-  ),
+  ({ isActive, value, children, className, ...props }, ref) => { throw new Error("STUB"); },
 );
 TabRoot.displayName = 'Tab';
 
 const TabButton = forwardRef<
   HTMLButtonElement,
   ComponentPropsWithoutRef<'button'>
->(({ children, className, ...props }, ref) => (
-  <UnStyledButton
-    {...props}
-    ref={ref}
-    type="button"
-    className={cn('graphiql-tab-button', className)}
-  >
-    {children}
-  </UnStyledButton>
-));
+>(({ children, className, ...props }, ref) => { throw new Error("STUB"); });
 TabButton.displayName = 'Tab.Button';
 
 const TabClose = forwardRef<
   HTMLButtonElement,
   ComponentPropsWithoutRef<'button'>
->((props, ref) => (
-  <UnStyledButton
-    aria-label="Close Tab"
-    {...props}
-    ref={ref}
-    type="button"
-    className={cn('graphiql-tab-close', props.className)}
-  >
-    <CloseIcon />
-  </UnStyledButton>
-));
+>((props, ref) => { throw new Error("STUB"); });
 TabClose.displayName = 'Tab.Close';
 
 export const Tab = Object.assign(TabRoot, {
@@ -74,18 +39,6 @@ interface TabsProps {
 }
 
 export const Tabs = forwardRef<HTMLUListElement, TabsProps>(
-  ({ values, onReorder, children, className, ...props }, ref) => (
-    <Reorder.Group
-      {...props}
-      ref={ref}
-      values={values}
-      onReorder={onReorder}
-      axis="x"
-      role="tablist"
-      className={cn('graphiql-tabs', className)}
-    >
-      {children}
-    </Reorder.Group>
-  ),
+  ({ values, onReorder, children, className, ...props }, ref) => { throw new Error("STUB"); },
 );
 Tabs.displayName = 'Tabs';

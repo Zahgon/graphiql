@@ -9,35 +9,9 @@ export function useChangeHandler(
   tabProperty: 'variables' | 'headers',
 ) {
   const { updateActiveTabValues } = useGraphiQLActions();
-  const { editor, storage } = useGraphiQL(state => ({
-    editor:
-      state[tabProperty === 'variables' ? 'variableEditor' : 'headerEditor'],
-    storage: state.storage,
-  }));
+  const { editor, storage } = useGraphiQL(state => { throw new Error("STUB"); });
   useEffect(() => {
-    if (!editor) {
-      return;
-    }
-    const store = debounce(500, (value: string) => {
-      if (storageKey === null) {
-        return;
-      }
-      storage.set(storageKey, value);
-    });
-    const updateTab = debounce(100, (value: string) => {
-      updateActiveTabValues({ [tabProperty]: value });
-    });
-
-    const handleChange = (_event: monaco.editor.IModelContentChangedEvent) => {
-      const newValue = editor.getValue();
-      store(newValue);
-      updateTab(newValue);
-      callback?.(newValue);
-    };
-    const disposable = editor.getModel()!.onDidChangeContent(handleChange);
-    return () => {
-      disposable.dispose();
-    };
+      throw new Error("STUB");
   }, [
     callback,
     editor,
@@ -52,29 +26,16 @@ export function useChangeHandler(
 export const useEditorState = (
   editor: 'query' | 'variable' | 'header',
 ): [string, (val: string) => void] => {
-  const editorInstance = useGraphiQL(state => state[`${editor}Editor`]);
+  const editorInstance = useGraphiQL(state => { throw new Error("STUB"); });
   const [value, setValue] = useState('');
   const model = editorInstance?.getModel();
 
   useEffect(() => {
-    if (!model) {
-      return;
-    }
-
-    function onChange() {
-      setValue(model!.getValue());
-    }
-
-    const disposable = model.onDidChangeContent(onChange);
-    // Initialize the value
-    onChange();
-    return () => {
-      disposable.dispose();
-    };
+      throw new Error("STUB");
   }, [model]);
 
   function handleChange(newValue: string) {
-    model!.setValue(newValue);
+      throw new Error("STUB");
   }
 
   return [value, handleChange];
@@ -97,7 +58,7 @@ export const useVariablesEditorState = (): [
   variables: string,
   setVariables: (content: string) => void,
 ] => {
-  return useEditorState('variable');
+    throw new Error("STUB");
 };
 
 /**
@@ -107,7 +68,7 @@ export const useHeadersEditorState = (): [
   headers: string,
   setHeaders: (content: string) => void,
 ] => {
-  return useEditorState('header');
+    throw new Error("STUB");
 };
 
 /**
@@ -140,30 +101,7 @@ export function useOptimisticState([
   const [state, setOperationsText] = useState(upstreamState);
 
   useEffect(() => {
-    if (lastStateRef.current.last === upstreamState) {
-      // No change; ignore
-      return;
-    }
-    lastStateRef.current.last = upstreamState;
-    if (lastStateRef.current.pending === null) {
-      // Gracefully accept update from upstream
-      setOperationsText(upstreamState);
-      return;
-    }
-    if (lastStateRef.current.pending === upstreamState) {
-      // They received our update and sent it back to us - clear pending, and
-      // send next if appropriate
-      lastStateRef.current.pending = null;
-      if (upstreamState !== state) {
-        // Change has occurred; upstream it
-        lastStateRef.current.pending = state;
-        upstreamSetState(state);
-      }
-      return;
-    }
-    // They got a different update; overwrite our local state (!!)
-    lastStateRef.current.pending = null;
-    setOperationsText(upstreamState);
+      throw new Error("STUB");
   }, [upstreamState, state, upstreamSetState]);
 
   const setState = (newState: string) => {
@@ -187,15 +125,10 @@ export const useDidUpdate: typeof useEffect = (fn, dependencies) => {
 
   // React Strict Mode intentionally mounts → unmounts → mounts the component during development.
   useEffect(() => {
-    return () => {
-      didMountRef.current = false;
-    };
+      throw new Error("STUB");
   }, []);
 
   useEffect(() => {
-    if (didMountRef.current) {
-      return fn();
-    }
-    didMountRef.current = true;
+      throw new Error("STUB");
   }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 };

@@ -32,26 +32,7 @@ export class SourceHelper {
   getTypeForVariableDefinitionNode(
     node: VariableDefinitionNode,
   ): GraphQLScalarType {
-    let namedTypeNode: NamedTypeNode | null = null;
-    let isList = false;
-    visit(node, {
-      ListType(_listNode: ListTypeNode) {
-        isList = true;
-      },
-      NamedType(namedNode: NamedTypeNode) {
-        namedTypeNode = namedNode;
-      },
-    });
-    if (isList) {
-      // TODO: This is not a name.value but a custom type that might confuse future programmers
-      return 'ListNode';
-    }
-    if (namedTypeNode) {
-      // TODO: Handle this for object types/ enums/ custom scalars
-      return (namedTypeNode as NamedTypeNode).name.value;
-    }
-    // TODO: Is handling all via string a correct fallback?
-    return 'String';
+      throw new Error("STUB");
   }
 
   validate(value: string, type: GraphQLScalarType) {
@@ -94,34 +75,7 @@ export class SourceHelper {
   }
 
   typeCast(value: string, type: GraphQLScalarType) {
-    if (type === 'Int') {
-      return parseInt(value, 10);
-    }
-    if (type === 'Float') {
-      return parseFloat(value);
-    }
-    if (type === 'Boolean') {
-      return Boolean(value);
-    }
-    if (type === 'String' || type === 'ID' || type === 'Enum') {
-      return value;
-    }
-
-    // TODO: Does this note need to have an impact?
-    // NOTE:
-    // -- We don't do anything for non-nulls - the backend will throw a meaningful error
-    // -- We treat custom types and lists similarly - as JSON - tedious for user to provide JSON but it works
-    // -- We treat enums as string and that fits
-
-    // Object type
-    try {
-      return JSON.parse(value);
-    } catch {
-      this.outputChannel.appendLine(
-        'Failed to parse user input as JSON, please use double quotes.',
-      );
-      return value;
-    }
+      throw new Error("STUB");
   }
 
   async getFragmentDefinitions(
@@ -136,19 +90,8 @@ export class SourceHelper {
         }
         visit(source.document, {
           FragmentDefinition(node) {
-            const existingDef = fragmentDefinitions.get(node.name.value);
-            const newVal = print(node);
-            if (
-              (existingDef && existingDef.content !== newVal) ||
-              !existingDef
-            ) {
-              fragmentDefinitions.set(node.name.value, {
-                definition: node,
-                content: newVal,
-                filePath: source.location,
-              });
-            }
-          },
+                throw new Error("STUB");
+            },
         });
       }
       return fragmentDefinitions;
@@ -161,66 +104,7 @@ export class SourceHelper {
     document: TextDocument,
     tags: string[] = ['gql'],
   ): ExtractedTemplateLiteral[] {
-    const text = document.getText();
-    const documents: ExtractedTemplateLiteral[] = [];
-
-    if (document.languageId === 'graphql') {
-      try {
-        const documentText = document.getText();
-        processGraphQLString(documentText, 0);
-        return documents;
-      } catch {}
-    }
-
-    for (const tag of tags) {
-      // https://regex101.com/r/Pd5PaU/2
-      const regExpGQL = new RegExp(tag + '\\s*`([\\s\\S]+?)`', 'mg');
-
-      let result: RegExpExecArray | null;
-      while ((result = regExpGQL.exec(text)) !== null) {
-        const contents = result[1];
-
-        // https://regex101.com/r/KFMXFg/2
-        if (contents.match('/${(.+)?}/g')) {
-          // We are ignoring operations with template variables for now
-          continue;
-        }
-        try {
-          processGraphQLString(contents, result.index + tag.length + 1);
-          // no-op on exception, so that non-parse-able source files
-          // don't break the extension while editing
-        } catch {}
-      }
-    }
-    return documents;
-
-    function processGraphQLString(textString: string, offset: number) {
-      const ast = parse(textString);
-      const operations = ast.definitions.filter(
-        def => def.kind === 'OperationDefinition',
-      );
-      for (const operation of operations) {
-        const op = operation as any;
-        const filteredAst = {
-          ...ast,
-          definitions: ast.definitions.filter(def => {
-            if (def.kind === 'OperationDefinition' && def !== op) {
-              return false;
-            }
-            return true;
-          }),
-        };
-        documents.push({
-          content: print(filteredAst),
-          uri: document.uri.path,
-          position: document.positionAt(op.loc.start + offset),
-          definition: op,
-          ast: filteredAst,
-        });
-      }
-      // no-op, so that non-parse-able source files
-      // don't break the extension while editing
-    }
+      throw new Error("STUB");
   }
 }
 
@@ -268,12 +152,10 @@ export const getFragmentDependenciesForAST = async (
 
   visit(parsedQuery, {
     FragmentDefinition(node) {
-      existingFrags.set(node.name.value, true);
-    },
+          throw new Error("STUB");
+      },
     FragmentSpread(node) {
-      if (!referencedFragNames.has(node.name.value)) {
-        referencedFragNames.add(node.name.value);
-      }
+        throw new Error("STUB");
     },
   });
 
@@ -289,14 +171,8 @@ export const getFragmentDependenciesForAST = async (
   for (const ast of asts) {
     visit(ast.definition, {
       FragmentSpread(node) {
-        if (
-          !referencedFragNames.has(node.name.value) &&
-          fragmentDefinitions.get(node.name.value)
-        ) {
-          asts.add(nullthrows(fragmentDefinitions.get(node.name.value)));
-          referencedFragNames.add(node.name.value);
-        }
-      },
+            throw new Error("STUB");
+        },
     });
     if (!existingFrags.has(ast.definition.name.value)) {
       referencedFragments.push(ast);

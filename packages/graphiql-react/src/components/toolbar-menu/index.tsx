@@ -11,12 +11,7 @@ const ToolbarMenuRoot: FC<ToolbarMenuProps> = ({
   children,
   ...props
 }) => {
-  return (
-    <DropdownMenu {...props}>
-      <Trigger asChild>{button}</Trigger>
-      <DropdownMenu.Content>{children}</DropdownMenu.Content>
-    </DropdownMenu>
-  );
+    throw new Error("STUB");
 };
 
 export const ToolbarMenu = Object.assign(ToolbarMenuRoot, {

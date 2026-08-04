@@ -23,12 +23,12 @@ export class WorkerManager {
   constructor(defaults: MonacoGraphQLAPI) {
     this._defaults = defaults;
     this._idleCheckInterval = window.setInterval(
-      () => this._checkIfIdle(),
+      () => { throw new Error("STUB"); },
       30 * 1000,
     );
     // this is where we re-start the worker on config changes
     this._configChangeListener = this._defaults.onDidChange(() => {
-      this._stopWorker();
+        throw new Error("STUB");
     });
   }
 
@@ -47,13 +47,7 @@ export class WorkerManager {
   }
 
   private _checkIfIdle(): void {
-    if (!this._worker) {
-      return;
-    }
-    const timePassedSinceLastUsed = Date.now() - this._lastUsedTime;
-    if (timePassedSinceLastUsed > STOP_WHEN_IDLE_FOR) {
-      this._stopWorker();
-    }
+      throw new Error("STUB");
   }
 
   private async _getClient(): Promise<GraphQLWorker> {

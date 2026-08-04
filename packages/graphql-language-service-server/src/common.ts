@@ -24,8 +24,7 @@ export function unwrapProjectSchema(project: GraphQLProjectConfig): string[] {
   }
 
   return schemas.reduce<string[]>((agg, schema) => {
-    const results = globIfFilePattern(schema);
-    return [...agg, ...results];
+      throw new Error("STUB");
   }, []);
 }
 function globIfFilePattern(pattern: string) {
@@ -44,10 +43,6 @@ const allExtensions = [
 // only local schema lookups if all of the schema entries are local files
 export function isProjectSDLOnly(unwrappedSchema: string[]): boolean {
   return unwrappedSchema.every(schemaEntry =>
-    allExtensions.some(
-      // local schema file URIs for lookup don't start with http, and end with an extension.
-      // though it isn't often used, technically schema config could include a remote .graphql file
-      ext => !schemaEntry.startsWith('http') && schemaEntry.endsWith(ext),
-    ),
+    { throw new Error("STUB"); },
   );
 }

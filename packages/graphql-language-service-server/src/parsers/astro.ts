@@ -16,10 +16,10 @@ async function parseAstro(source: string): Promise<ParseAstroResult> {
     position: false, // defaults to `true`
   });
 
-  if (diagnostics.some(d => d.severity === /* Error */ 1)) {
+  if (diagnostics.some(d => { throw new Error("STUB"); })) {
     return {
       type: 'error',
-      errors: diagnostics.map(d => JSON.stringify(d)),
+      errors: diagnostics.map(d => { throw new Error("STUB"); }),
     };
   }
 
@@ -44,28 +44,5 @@ async function parseAstro(source: string): Promise<ParseAstroResult> {
 }
 
 export const astroParser: SourceParser = async (text, uri, logger) => {
-  const parseAstroResult = await parseAstro(text);
-  if (parseAstroResult.type === 'error') {
-    logger.info(
-      `Could not parse the astro file at ${uri} to extract the graphql tags:`,
-    );
-    for (const error of parseAstroResult.errors) {
-      logger.info(error);
-    }
-    return null;
-  }
-
-  const rangeMapper: RangeMapper = range => {
-    return new Range(
-      new Position(
-        range.start.line + parseAstroResult.scriptOffset,
-        range.start.character,
-      ),
-      new Position(
-        range.end.line + parseAstroResult.scriptOffset,
-        range.end.character,
-      ),
-    );
-  };
-  return { asts: parseAstroResult.scriptAst, rangeMapper };
+    throw new Error("STUB");
 };

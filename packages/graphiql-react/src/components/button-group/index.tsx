@@ -5,11 +5,5 @@ import './index.css';
 export const ButtonGroup = forwardRef<
   HTMLDivElement,
   ComponentPropsWithoutRef<'div'>
->((props, ref) => (
-  <div
-    {...props}
-    ref={ref}
-    className={cn('graphiql-button-group', props.className)}
-  />
-));
+>((props, ref) => { throw new Error("STUB"); });
 ButtonGroup.displayName = 'ButtonGroup';

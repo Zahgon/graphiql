@@ -16,16 +16,7 @@ export function isPromise<T>(value: Promise<T> | any): value is Promise<T> {
 // Duck-type Observable.take(1).toPromise()
 function observableToPromise<T>(observable: Observable<T>): Promise<T> {
   return new Promise((resolve, reject) => {
-    const subscription = observable.subscribe({
-      next(v) {
-        resolve(v);
-        subscription.unsubscribe();
-      },
-      error: reject,
-      complete() {
-        reject(new Error('no value resolved'));
-      },
-    });
+      throw new Error("STUB");
   });
 }
 

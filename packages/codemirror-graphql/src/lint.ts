@@ -42,23 +42,6 @@ CodeMirror.registerHelper(
   'lint',
   'graphql',
   (text: string, options: GraphQLLintOptions): CodeMirror.Annotation[] => {
-    const { schema, validationRules, externalFragments } = options;
-    const rawResults = getDiagnostics(
-      text,
-      schema,
-      validationRules,
-      undefined,
-      externalFragments,
-    );
-
-    const results = rawResults.map(error => ({
-      message: error.message,
-      severity: error.severity ? SEVERITY[error.severity - 1] : SEVERITY[0],
-      type: error.source ? TYPE[error.source] : undefined,
-      from: CodeMirror.Pos(error.range.start.line, error.range.start.character),
-      to: CodeMirror.Pos(error.range.end.line, error.range.end.character),
-    }));
-
-    return results;
+      throw new Error("STUB");
   },
 );

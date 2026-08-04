@@ -93,52 +93,14 @@ function renderDefinitionDescription(
   useMarkdown?: boolean,
   description?: string | null,
 ) {
-  const into: string[] = [];
-
-  const type = 'type' in t ? t.type : t;
-
-  // input field description
-  if ('type' in t && t.description) {
-    text(into, t.description);
-    text(into, '\n\n');
-  }
-
-  // type
-  text(into, renderTypeToString(type, useMarkdown));
-
-  // type description
-  if (description) {
-    text(into, '\n');
-    text(into, description);
-  } else if (!isScalarType(type) && 'description' in type && type.description) {
-    text(into, '\n');
-    text(into, type.description);
-  } else if (
-    'ofType' in type &&
-    !isScalarType(type.ofType) &&
-    'description' in type.ofType &&
-    type.ofType.description
-  ) {
-    text(into, '\n');
-    text(into, type.ofType.description);
-  }
-
-  return into.join('');
+    throw new Error("STUB");
 }
 
 function renderTypeToString(
   t: GraphQLInputType | GraphQLInputField,
   useMarkdown?: boolean,
 ) {
-  const into: string[] = [];
-  if (useMarkdown) {
-    text(into, '```graphql\n');
-  }
-  renderType(into, t);
-  if (useMarkdown) {
-    text(into, '\n```');
-  }
-  return into.join('');
+    throw new Error("STUB");
 }
 
 const defaultScalarTypesMap: { [key: string]: JSONSchema6 } = {
@@ -155,11 +117,7 @@ class Marker {
   private set = new Set<string>();
 
   mark(name: string): boolean {
-    if (this.set.has(name)) {
-      return false;
-    }
-    this.set.add(name);
-    return true;
+      throw new Error("STUB");
   }
 }
 
@@ -173,140 +131,7 @@ function getJSONSchemaFromGraphQLType(
   fieldOrType: GraphQLInputType | GraphQLInputField,
   options?: JSONSchemaRunningOptions,
 ): DefinitionResult {
-  let definition: CombinedSchema = Object.create(null);
-  const definitions: Definitions = Object.create(null);
-
-  // field or type
-  const isField = 'type' in fieldOrType;
-  // type
-  const type = isField ? fieldOrType.type : fieldOrType;
-  // base type
-  const baseType = isNonNullType(type) ? type.ofType : type;
-  const required = isNonNullType(type);
-
-  if (isScalarType(baseType)) {
-    //  scalars
-    if (options?.scalarSchemas?.[baseType.name]) {
-      // deep clone
-      definition = JSON.parse(
-        JSON.stringify(options.scalarSchemas[baseType.name]),
-      );
-    } else {
-      // any
-      definition.type = ['string', 'number', 'boolean', 'integer'];
-    }
-    if (!required) {
-      if (Array.isArray(definition.type)) {
-        definition.type.push('null');
-      } else if (definition.type) {
-        definition.type = [definition.type, 'null'];
-      } else if (definition.enum) {
-        definition.enum.push(null);
-      } else if (definition.oneOf) {
-        definition.oneOf.push({ type: 'null' });
-      } else {
-        definition = {
-          oneOf: [definition, { type: 'null' }],
-        };
-      }
-    }
-  } else if (isEnumType(baseType)) {
-    definition.enum = baseType.getValues().map(val => val.name);
-    if (!required) {
-      definition.enum.push(null);
-    }
-  } else if (isListType(baseType)) {
-    if (required) {
-      definition.type = 'array';
-    } else {
-      definition.type = ['array', 'null'];
-    }
-
-    const { definition: def, definitions: defs } = getJSONSchemaFromGraphQLType(
-      baseType.ofType,
-      options,
-    );
-
-    definition.items = def;
-
-    if (defs) {
-      for (const defName of Object.keys(defs)) {
-        definitions[defName] = defs[defName];
-      }
-    }
-  } else if (isInputObjectType(baseType)) {
-    if (required) {
-      definition.$ref = `#/definitions/${baseType.name}`;
-    } else {
-      definition.oneOf = [
-        { $ref: `#/definitions/${baseType.name}` },
-        { type: 'null' },
-      ];
-    }
-    if (options?.definitionMarker?.mark(baseType.name)) {
-      const fields = baseType.getFields();
-
-      const fieldDef: PropertiedJSON6 = {
-        type: 'object',
-        properties: {},
-        required: [],
-      };
-
-      fieldDef.description = renderDefinitionDescription(baseType);
-      if (options?.useMarkdownDescription) {
-        // @ts-expect-error
-        fieldDef.markdownDescription = renderDefinitionDescription(
-          baseType,
-          true,
-        );
-      }
-
-      for (const fieldName of Object.keys(fields)) {
-        const field = fields[fieldName];
-        const {
-          required: fieldRequired,
-          definition: fieldDefinition,
-          definitions: typeDefinitions,
-        } = getJSONSchemaFromGraphQLType(field, options);
-
-        fieldDef.properties[fieldName] = fieldDefinition;
-
-        if (fieldRequired) {
-          fieldDef.required!.push(fieldName);
-        }
-        if (typeDefinitions) {
-          for (const [defName, value] of Object.entries(typeDefinitions)) {
-            definitions[defName] = value;
-          }
-        }
-      }
-      definitions[baseType.name] = fieldDef;
-    }
-  }
-
-  if ('defaultValue' in fieldOrType && fieldOrType.defaultValue !== undefined) {
-    definition.default = fieldOrType.defaultValue as
-      | JSONSchema4Type
-      | undefined;
-  }
-
-  // append to type descriptions, or schema description
-  const { description } = definition;
-  definition.description = renderDefinitionDescription(
-    fieldOrType,
-    false,
-    description,
-  );
-  if (options?.useMarkdownDescription) {
-    // @ts-expect-error
-    definition.markdownDescription = renderDefinitionDescription(
-      fieldOrType,
-      true,
-      description,
-    );
-  }
-
-  return { required, definition, definitions };
+    throw new Error("STUB");
 }
 
 /**
@@ -350,40 +175,5 @@ export function getVariablesJSONSchema(
   variableToType: VariableToType,
   options?: JSONSchemaOptions,
 ): JSONSchema6 {
-  const jsonSchema: PropertiedJSON6 = {
-    // this gets monaco-json validation working again
-    // otherwise it shows an error for newer schema draft versions
-    // variables and graphql types are simple and compatible with all versions of json schema
-    // since draft 4. package.json and many other schemas still use draft 4
-    $schema: 'http://json-schema.org/draft-04/schema',
-    type: 'object',
-    properties: {},
-    required: [],
-    additionalProperties: false,
-  };
-
-  const runtimeOptions: JSONSchemaRunningOptions = {
-    ...options,
-    definitionMarker: new Marker(),
-    scalarSchemas: {
-      ...defaultScalarTypesMap,
-      ...options?.scalarSchemas,
-    },
-  };
-
-  if (variableToType) {
-    // I would use a reduce here, but I wanted it to be readable.
-    for (const [variableName, type] of Object.entries(variableToType)) {
-      const { definition, required, definitions } =
-        getJSONSchemaFromGraphQLType(type, runtimeOptions);
-      jsonSchema.properties[variableName] = definition;
-      if (required) {
-        jsonSchema.required?.push(variableName);
-      }
-      if (definitions) {
-        jsonSchema.definitions = { ...jsonSchema?.definitions, ...definitions };
-      }
-    }
-  }
-  return jsonSchema;
+    throw new Error("STUB");
 }

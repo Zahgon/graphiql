@@ -33,14 +33,10 @@ export const optionsStateField = StateField.define<GqlExtensionsOptions | void>(
   },
 );
 export const updateSchema = (view: EditorView, schema?: GraphQLSchema) => {
-  view.dispatch({
-    effects: schemaEffect.of(schema),
-  });
+    throw new Error("STUB");
 };
 export const updateOpts = (view: EditorView, opts?: GqlExtensionsOptions) => {
-  view.dispatch({
-    effects: optionsEffect.of(opts),
-  });
+    throw new Error("STUB");
 };
 export const getSchema = (state: EditorState) => {
   return state.field(schemaStateField);
@@ -56,7 +52,4 @@ const defaultOpts: GqlExtensionsOptions = {
 export const stateExtensions = (
   schema?: GraphQLSchema,
   opts?: GqlExtensionsOptions,
-) => [
-  schemaStateField.init(() => schema),
-  optionsStateField.init(() => ({ ...defaultOpts, ...opts })),
-];
+) => { throw new Error("STUB"); };

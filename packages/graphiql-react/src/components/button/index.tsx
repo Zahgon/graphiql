@@ -7,13 +7,7 @@ type UnStyledButtonProps = ComponentPropsWithoutRef<'button'>;
 export const UnStyledButton = forwardRef<
   HTMLButtonElement,
   UnStyledButtonProps
->((props, ref) => (
-  <button
-    {...props}
-    ref={ref}
-    className={cn('graphiql-un-styled', props.className)}
-  />
-));
+>((props, ref) => { throw new Error("STUB"); });
 UnStyledButton.displayName = 'UnStyledButton';
 
 interface ButtonProps extends UnStyledButtonProps {
@@ -21,19 +15,6 @@ interface ButtonProps extends UnStyledButtonProps {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (props, ref) => (
-    <button
-      {...props}
-      ref={ref}
-      className={cn(
-        'graphiql-button',
-        {
-          success: 'graphiql-button-success',
-          error: 'graphiql-button-error',
-        }[props.state!],
-        props.className,
-      )}
-    />
-  ),
+  (props, ref) => { throw new Error("STUB"); },
 );
 Button.displayName = 'Button';

@@ -61,50 +61,11 @@ export type GraphiQLExplorerPluginProps = Omit<
 >;
 
 const ExplorerPlugin: FC<GraphiQLExplorerPluginProps> = props => {
-  const { setOperationName, run } = useGraphiQLActions();
-  const schema = useGraphiQL(state => state.schema);
-
-  // handle running the current operation from the plugin
-  const handleRunOperation = useCallback(
-    (operationName: string | null) => {
-      if (operationName) {
-        // set the plugin-defined operation name before executing
-        setOperationName(operationName);
-      }
-      run();
-    },
-    [run, setOperationName],
-  );
-
-  // load the current editor tab state into the explorer
-  const [operationsString, handleEditOperations] = useOptimisticState(
-    useOperationsEditorState(),
-  );
-
-  return (
-    <GraphiQLExplorer
-      schema={schema}
-      onRunOperation={handleRunOperation}
-      explorerIsOpen
-      colors={colors}
-      arrowOpen={arrowOpen}
-      arrowClosed={arrowClosed}
-      checkboxUnchecked={checkboxUnchecked}
-      checkboxChecked={checkboxChecked}
-      styles={styles}
-      query={operationsString}
-      onEdit={handleEditOperations}
-      {...props}
-    />
-  );
+    throw new Error("STUB");
 };
 
 export function explorerPlugin(
   props?: GraphiQLExplorerPluginProps,
 ): GraphiQLPlugin {
-  return {
-    title: 'GraphiQL Explorer',
-    icon: FolderPlusIcon,
-    content: () => <ExplorerPlugin {...props} />,
-  };
+    throw new Error("STUB");
 }

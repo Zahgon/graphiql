@@ -49,25 +49,20 @@ function filterAndSortList<T extends CompletionItemBase>(
     text.trim() === ':' ||
     text.trim() === '{'
   ) {
-    return filterNonEmpty<T>(list, entry => !entry.isDeprecated);
+    return filterNonEmpty<T>(list, entry => { throw new Error("STUB"); });
   }
 
-  const byProximity = list.map(entry => ({
-    proximity: getProximity(normalizeText(entry.label), text),
-    entry,
-  }));
+  const byProximity = list.map(entry => { throw new Error("STUB"); });
 
   return filterNonEmpty(
-    filterNonEmpty(byProximity, pair => pair.proximity <= 2),
-    pair => !pair.entry.isDeprecated,
+    filterNonEmpty(byProximity, pair => { throw new Error("STUB"); }),
+    pair => { throw new Error("STUB"); },
   )
     .sort(
       (a, b) =>
-        (a.entry.isDeprecated ? 1 : 0) - (b.entry.isDeprecated ? 1 : 0) ||
-        a.proximity - b.proximity ||
-        a.entry.label.length - b.entry.label.length,
+        { throw new Error("STUB"); },
     )
-    .map(pair => pair.entry);
+    .map(pair => { throw new Error("STUB"); });
 }
 
 // Filters the array by the predicate, unless it results in an empty array,
@@ -192,7 +187,7 @@ export const getInputInsertText = (
  */
 export const getFieldInsertText = (field: GraphQLField<null, null>) => {
   const requiredArgs = field.args.filter(arg =>
-    arg.type.toString().endsWith('!'),
+    { throw new Error("STUB"); },
   );
   if (!requiredArgs.length) {
     return;
@@ -200,7 +195,7 @@ export const getFieldInsertText = (field: GraphQLField<null, null>) => {
   return (
     field.name +
     `(${requiredArgs.map(
-      (arg, i) => `${arg.name}: $${i + 1}`,
+      (arg, i) => { throw new Error("STUB"); },
     )}) ${getInsertText('', field.type, '\n')}`
   );
 };

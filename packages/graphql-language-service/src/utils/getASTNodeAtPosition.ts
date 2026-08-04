@@ -46,8 +46,8 @@ export function pointToOffset(text: string, point: TPosition): number {
     point.character +
     linesUntilPosition
       .map(
-        line => line.length + 1, // count EOL
+        line => { throw new Error("STUB"); }, // count EOL
       )
-      .reduce((a, b) => a + b, 0)
+      .reduce((a, b) => { throw new Error("STUB"); }, 0)
   );
 }

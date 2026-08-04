@@ -14,8 +14,5 @@ import { initialize } from 'monaco-editor/esm/vs/editor/editor.worker';
 import { GraphQLWorker } from './GraphQLWorker';
 
 globalThis.onmessage = () => {
-  initialize(
-    (ctx: monaco.worker.IWorkerContext, createData: ICreateData) =>
-      new GraphQLWorker(ctx, createData),
-  );
+    throw new Error("STUB");
 };

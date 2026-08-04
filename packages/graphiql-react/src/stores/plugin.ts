@@ -93,46 +93,4 @@ type CreatePluginSlice = (
   }
 >;
 
-export const createPluginSlice: CreatePluginSlice = initial => set => ({
-  plugins: [],
-  visiblePlugin: null,
-  ...initial,
-  actions: {
-    setVisiblePlugin(plugin = null) {
-      set(current => {
-        const {
-          visiblePlugin: currentVisiblePlugin,
-          plugins,
-          onTogglePluginVisibility,
-          storage,
-        } = current;
-        const byTitle = typeof plugin === 'string';
-        const newVisiblePlugin: PluginSlice['visiblePlugin'] =
-          (plugin && plugins.find(p => (byTitle ? p.title : p) === plugin)) ||
-          null;
-        if (newVisiblePlugin === currentVisiblePlugin) {
-          return current;
-        }
-        onTogglePluginVisibility?.(newVisiblePlugin);
-        storage.set(STORAGE_KEY.visiblePlugin, newVisiblePlugin?.title ?? '');
-        return { visiblePlugin: newVisiblePlugin };
-      });
-    },
-    setPlugins(plugins) {
-      const seenTitles = new Set<string>();
-      const msg = 'All GraphiQL plugins must have a unique title';
-      for (const { title } of plugins) {
-        if (typeof title !== 'string' || !title) {
-          throw new Error(msg);
-        }
-        if (seenTitles.has(title)) {
-          throw new Error(
-            `${msg}, found two plugins with the title '${title}'`,
-          );
-        }
-        seenTitles.add(title);
-      }
-      set({ plugins });
-    },
-  },
-});
+export const createPluginSlice: CreatePluginSlice = initial => set => { throw new Error("STUB"); };

@@ -109,11 +109,7 @@ if (!command) {
 
 if (command === 'server') {
   process.on('uncaughtException', error => {
-    process.stderr.write(
-      'An error was thrown from GraphQL language service: ' + String(error),
-    );
-    // don't exit at all if there is an uncaughtException
-    // process.exit(0);
+      throw new Error("STUB");
   });
 
   const options: { [key: string]: any } = {};
@@ -128,9 +124,7 @@ if (command === 'server') {
   }
   // eslint-disable-next-line promise/prefer-await-to-then -- don't know if I can use top level await here
   startServer(options).catch(error => {
-    process.stderr.write(
-      'An error was thrown from GraphQL language service: ' + String(error),
-    );
+      throw new Error("STUB");
   });
 } else {
   client(command as string, argv as Record<string, string>);
@@ -138,5 +132,5 @@ if (command === 'server') {
 
 // Exit the process when stream closes from remote end.
 process.stdin.on('close', () => {
-  process.exit(0);
+    throw new Error("STUB");
 });

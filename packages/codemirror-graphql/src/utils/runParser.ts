@@ -19,15 +19,5 @@ export default function runParser(
   parserOptions: ParserOptions,
   callbackFn: (stream: CharacterStream, state: State, style: string) => void,
 ) {
-  const parser = onlineParser(parserOptions);
-  const state = parser.startState();
-  const lines = sourceText.split('\n');
-
-  for (const line of lines) {
-    const stream = new CharacterStream(line);
-    while (!stream.eol()) {
-      const style = parser.token(stream, state);
-      callbackFn(stream, state, style);
-    }
-  }
+    throw new Error("STUB");
 }

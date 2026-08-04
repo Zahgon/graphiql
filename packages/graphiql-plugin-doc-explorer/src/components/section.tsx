@@ -39,16 +39,7 @@ export const ExplorerSection: FC<ExplorerSectionProps> = ({
   title,
   children,
 }) => {
-  const Icon = TYPE_TO_ICON[title];
-  return (
-    <div>
-      <div className="graphiql-doc-explorer-section-title">
-        <Icon />
-        {title}
-      </div>
-      <div className="graphiql-doc-explorer-section-content">{children}</div>
-    </div>
-  );
+    throw new Error("STUB");
 };
 
 const TYPE_TO_ICON: Record<ExplorerSectionProps['title'], FC> = {

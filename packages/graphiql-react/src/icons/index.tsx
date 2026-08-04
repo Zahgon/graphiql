@@ -77,7 +77,7 @@ function generateIcon(
       .toLowerCase() + ' icon';
 
   const IconComponent: FC<ComponentProps<'svg'>> = props => {
-    return <RawComponent title={title} {...props} />;
+      throw new Error("STUB");
   };
 
   IconComponent.displayName = RawComponent.name;

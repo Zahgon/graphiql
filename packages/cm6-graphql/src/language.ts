@@ -55,5 +55,5 @@ export const graphqlLanguage = LRLanguage.define({
 });
 
 export function graphqlLanguageSupport() {
-  return new LanguageSupport(graphqlLanguage);
+    throw new Error("STUB");
 }

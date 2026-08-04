@@ -12,17 +12,6 @@ interface MarkdownContentProps extends Omit<
 }
 
 export const MarkdownContent = forwardRef<HTMLDivElement, MarkdownContentProps>(
-  ({ children, onlyShowFirstChild, type, ...props }, ref) => (
-    <div
-      {...props}
-      ref={ref}
-      className={cn(
-        `graphiql-markdown-${type}`,
-        onlyShowFirstChild && 'graphiql-markdown-preview',
-        props.className,
-      )}
-      dangerouslySetInnerHTML={{ __html: markdown.render(children) }}
-    />
-  ),
+  ({ children, onlyShowFirstChild, type, ...props }, ref) => { throw new Error("STUB"); },
 );
 MarkdownContent.displayName = 'MarkdownContent';

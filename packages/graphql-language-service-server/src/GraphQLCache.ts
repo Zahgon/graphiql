@@ -65,12 +65,7 @@ const codeLoaderConfig: CodeFileLoaderConfig = {
 };
 
 const LanguageServiceExtension: GraphQLExtensionDeclaration = api => {
-  // For schema
-  api.loaders.schema.register(new CodeFileLoader(codeLoaderConfig));
-  // For documents
-  api.loaders.documents.register(new CodeFileLoader(codeLoaderConfig));
-
-  return { name: 'languageService' };
+    throw new Error("STUB");
 };
 
 // Maximum files to read when processing GraphQL files.
@@ -160,25 +155,10 @@ export class GraphQLCache {
     this._onSchemaChange = onSchemaChange;
   }
 
-  getGraphQLConfig = (): GraphQLConfig => this._graphQLConfig;
+  getGraphQLConfig = (): GraphQLConfig => { throw new Error("STUB"); };
 
   getProjectForFile = (uri: string): GraphQLProjectConfig | void => {
-    try {
-      const project = this._graphQLConfig.getProjectForFile(
-        URI.parse(uri).fsPath,
-      );
-      if (!project.documents) {
-        this._logger.warn(
-          `No documents configured for project ${project.name}. Many features will not work correctly.`,
-        );
-      }
-      return project;
-    } catch (err) {
-      this._logger.error(
-        `there was an error loading the project config for this file ${err}`,
-      );
-      return;
-    }
+      throw new Error("STUB");
   };
 
   getFragmentDependencies = async (
@@ -214,12 +194,10 @@ export class GraphQLCache {
 
     visit(parsedQuery, {
       FragmentDefinition(node) {
-        existingFrags.set(node.name.value, true);
-      },
+            throw new Error("STUB");
+        },
       FragmentSpread(node) {
-        if (!referencedFragNames.has(node.name.value)) {
-          referencedFragNames.add(node.name.value);
-        }
+          throw new Error("STUB");
       },
     });
 
@@ -235,14 +213,8 @@ export class GraphQLCache {
     for (const ast of asts) {
       visit(ast.definition, {
         FragmentSpread(node) {
-          if (
-            !referencedFragNames.has(node.name.value) &&
-            fragmentDefinitions.get(node.name.value)
-          ) {
-            asts.add(nullthrows(fragmentDefinitions.get(node.name.value)));
-            referencedFragNames.add(node.name.value);
-          }
-        },
+              throw new Error("STUB");
+          },
       });
       if (!existingFrags.has(ast.definition.name.value)) {
         referencedFragments.push(ast);
@@ -253,7 +225,7 @@ export class GraphQLCache {
   };
 
   _cacheKeyForProject = ({ dirpath, name }: GraphQLProjectConfig): string => {
-    return `${dirpath}-${name}`;
+      throw new Error("STUB");
   };
 
   getFragmentDefinitions = async (
@@ -282,165 +254,24 @@ export class GraphQLCache {
     parsedQuery: ASTNode,
     objectTypeDefinitions: Map<string, ObjectTypeInfo>,
   ): Promise<Array<ObjectTypeInfo>> => {
-    if (!objectTypeDefinitions) {
-      return [];
-    }
-
-    const existingObjectTypes = new Map();
-    const referencedObjectTypes = new Set<string>();
-
-    visit(parsedQuery, {
-      ObjectTypeDefinition(node) {
-        existingObjectTypes.set(node.name.value, true);
-      },
-      InputObjectTypeDefinition(node) {
-        existingObjectTypes.set(node.name.value, true);
-      },
-      EnumTypeDefinition(node) {
-        existingObjectTypes.set(node.name.value, true);
-      },
-      NamedType(node) {
-        if (!referencedObjectTypes.has(node.name.value)) {
-          referencedObjectTypes.add(node.name.value);
-        }
-      },
-      UnionTypeDefinition(node) {
-        existingObjectTypes.set(node.name.value, true);
-      },
-      ScalarTypeDefinition(node) {
-        existingObjectTypes.set(node.name.value, true);
-      },
-      InterfaceTypeDefinition(node) {
-        existingObjectTypes.set(node.name.value, true);
-      },
-    });
-
-    const asts = new Set<ObjectTypeInfo>();
-    for (const name of referencedObjectTypes) {
-      if (!existingObjectTypes.has(name) && objectTypeDefinitions.has(name)) {
-        asts.add(nullthrows(objectTypeDefinitions.get(name)));
-      }
-    }
-
-    const referencedObjects: ObjectTypeInfo[] = [];
-
-    for (const ast of asts) {
-      visit(ast.definition, {
-        NamedType(node) {
-          if (
-            !referencedObjectTypes.has(node.name.value) &&
-            objectTypeDefinitions.get(node.name.value)
-          ) {
-            asts.add(nullthrows(objectTypeDefinitions.get(node.name.value)));
-            referencedObjectTypes.add(node.name.value);
-          }
-        },
-      });
-      if (!existingObjectTypes.has(ast.definition.name.value)) {
-        referencedObjects.push(ast);
-      }
-    }
-
-    return referencedObjects;
+      throw new Error("STUB");
   };
 
   getObjectTypeDefinitions = async (
     projectConfig: GraphQLProjectConfig,
   ): Promise<Map<string, ObjectTypeInfo>> => {
-    // This function may be called from other classes.
-    // If then, check the cache first.
-    const rootDir = projectConfig.dirpath;
-    const cacheKey = this._cacheKeyForProject(projectConfig);
-    if (this._typeDefinitionsCache.has(cacheKey)) {
-      return this._typeDefinitionsCache.get(cacheKey) || new Map();
-    }
-    const list = await this._readFilesFromInputDirs(rootDir, projectConfig);
-    const { objectTypeDefinitions, graphQLFileMap } =
-      await this.readAllGraphQLFiles(list);
-    this._typeDefinitionsCache.set(cacheKey, objectTypeDefinitions);
-    this._graphQLFileListCache.set(cacheKey, graphQLFileMap);
-
-    return objectTypeDefinitions;
+      throw new Error("STUB");
   };
 
   _readFilesFromInputDirs = (
     rootDir: string,
     projectConfig: GraphQLProjectConfig,
   ): Promise<Array<GraphQLFileMetadata>> => {
-    let pattern: string;
-    const patterns = this._getSchemaAndDocumentFilePatterns(projectConfig);
-
-    // See https://github.com/graphql/graphql-language-service/issues/221
-    // for details on why special handling is required here for the
-    // documents.length === 1 case.
-    if (patterns.length === 1) {
-      // @ts-ignore
-      pattern = patterns[0];
-    } else {
-      pattern = `{${patterns.join(',')}}`;
-    }
-
-    return new Promise((resolve, reject) => {
-      const globResult = new glob.Glob(
-        pattern,
-        {
-          cwd: rootDir,
-          stat: true,
-          absolute: false,
-          ignore: [
-            'generated/relay',
-            '**/__flow__/**',
-            '**/__generated__/**',
-            '**/__github__/**',
-            '**/__mocks__/**',
-            '**/node_modules/**',
-            '**/__flowtests__/**',
-          ],
-        },
-        error => {
-          if (error) {
-            reject(error);
-          }
-        },
-      );
-      globResult.on('end', () => {
-        resolve(
-          Object.keys(globResult.statCache)
-            .filter(
-              filePath => typeof globResult.statCache[filePath] === 'object',
-            )
-            .filter(filePath => projectConfig.match(filePath))
-            .map(filePath => {
-              // @TODO
-              // so we have to force this here
-              // because glob's DefinitelyTyped doesn't use fs.Stats here though
-              // the docs indicate that is what's there :shrug:
-              const cacheEntry = globResult.statCache[filePath] as fs.Stats;
-              return {
-                filePath: URI.file(filePath).toString(),
-                mtime: Math.trunc(cacheEntry.mtime.getTime() / 1000),
-                size: cacheEntry.size,
-              };
-            }),
-        );
-      });
-    });
+      throw new Error("STUB");
   };
 
   _getSchemaAndDocumentFilePatterns = (projectConfig: GraphQLProjectConfig) => {
-    const patterns: string[] = [];
-
-    for (const pointer of [projectConfig.documents, projectConfig.schema]) {
-      if (pointer) {
-        if (typeof pointer === 'string') {
-          patterns.push(pointer);
-        } else if (Array.isArray(pointer)) {
-          patterns.push(...pointer);
-        }
-      }
-    }
-
-    return patterns;
+      throw new Error("STUB");
   };
 
   async updateFragmentDefinition(
@@ -450,14 +281,7 @@ export class GraphQLCache {
   ): Promise<void> {
     const cache = this._fragmentDefinitionsCache.get(projectCacheKey);
     const asts = contents.map(({ query }) => {
-      try {
-        return {
-          ast: parse(query),
-          query,
-        };
-      } catch {
-        return { ast: null, query };
-      }
+        throw new Error("STUB");
     });
     if (cache) {
       // first go through the fragment list to delete the ones from this file
@@ -505,14 +329,7 @@ export class GraphQLCache {
   ): Promise<void> {
     const cache = this._typeDefinitionsCache.get(projectCacheKey);
     const asts = contents.map(({ query }) => {
-      try {
-        return {
-          ast: parse(query),
-          query,
-        };
-      } catch {
-        return { ast: null, query };
-      }
+        throw new Error("STUB");
     });
     if (cache) {
       // first go through the types list to delete the ones from this file
@@ -554,61 +371,7 @@ export class GraphQLCache {
     schemaPath: string | null,
     schemaCacheKey: string | null,
   ): GraphQLSchema {
-    const graphQLFileMap = this._graphQLFileListCache.get(this._configDir);
-    const typeExtensions: DefinitionNode[] = [];
-
-    if (!graphQLFileMap) {
-      return schema;
-    }
-    for (const { filePath, asts } of graphQLFileMap.values()) {
-      for (const ast of asts) {
-        if (filePath === schemaPath) {
-          continue;
-        }
-        for (const definition of ast.definitions) {
-          switch (definition.kind) {
-            case Kind.OBJECT_TYPE_DEFINITION:
-            case Kind.INTERFACE_TYPE_DEFINITION:
-            case Kind.ENUM_TYPE_DEFINITION:
-            case Kind.UNION_TYPE_DEFINITION:
-            case Kind.SCALAR_TYPE_DEFINITION:
-            case Kind.INPUT_OBJECT_TYPE_DEFINITION:
-            case Kind.SCALAR_TYPE_EXTENSION:
-            case Kind.OBJECT_TYPE_EXTENSION:
-            case Kind.INTERFACE_TYPE_EXTENSION:
-            case Kind.UNION_TYPE_EXTENSION:
-            case Kind.ENUM_TYPE_EXTENSION:
-            case Kind.INPUT_OBJECT_TYPE_EXTENSION:
-            case Kind.DIRECTIVE_DEFINITION:
-              typeExtensions.push(definition);
-              break;
-          }
-        }
-      }
-    }
-
-    if (schemaCacheKey) {
-      const sorted = typeExtensions.sort((a: any, b: any) => {
-        const aName = a.definition ? a.definition.name.value : a.name.value;
-        const bName = b.definition ? b.definition.name.value : b.name.value;
-        return aName > bName ? 1 : -1;
-      });
-      const hash = stringToHash(JSON.stringify(sorted));
-
-      if (
-        this._typeExtensionMap.has(schemaCacheKey) &&
-        this._typeExtensionMap.get(schemaCacheKey) === hash
-      ) {
-        return schema;
-      }
-
-      this._typeExtensionMap.set(schemaCacheKey, hash);
-    }
-
-    return extendSchema(schema, {
-      kind: Kind.DOCUMENT,
-      definitions: typeExtensions,
-    });
+      throw new Error("STUB");
   }
 
   getSchema = async (
@@ -683,7 +446,7 @@ export class GraphQLCache {
   }
 
   _getProjectName(projectConfig: GraphQLProjectConfig) {
-    return projectConfig?.name || 'default';
+      throw new Error("STUB");
   }
 
   /**
@@ -697,40 +460,7 @@ export class GraphQLCache {
     fragmentDefinitions: Map<string, FragmentInfo>;
     graphQLFileMap: Map<string, GraphQLFileInfo>;
   }> => {
-    const queue = list.slice(); // copy
-    const responses: GraphQLFileInfo[] = [];
-    while (queue.length) {
-      const chunk = queue.splice(0, MAX_READS);
-      const promises = chunk.map(async fileInfo => {
-        try {
-          const response = await this.promiseToReadGraphQLFile(
-            fileInfo.filePath,
-          );
-          responses.push({
-            ...response,
-            mtime: fileInfo.mtime,
-            size: fileInfo.size,
-          });
-        } catch (error: any) {
-          // eslint-disable-next-line no-console
-          console.log('pro', error);
-          /**
-           * fs emits `EMFILE | ENFILE` error when there are too many
-           * open files - this can cause some fragment files not to be
-           * processed.  Solve this case by implementing a queue to save
-           * files failed to be processed because of `EMFILE` error,
-           * and await on Promises created with the next batch from the
-           * queue.
-           */
-          if (error.code === 'EMFILE' || error.code === 'ENFILE') {
-            queue.push(fileInfo);
-          }
-        }
-      });
-      await Promise.all(promises); // eslint-disable-line no-await-in-loop
-    }
-
-    return this.processGraphQLFiles(responses);
+      throw new Error("STUB");
   };
 
   /**
@@ -744,48 +474,7 @@ export class GraphQLCache {
     fragmentDefinitions: Map<string, FragmentInfo>;
     graphQLFileMap: Map<string, GraphQLFileInfo>;
   } => {
-    const objectTypeDefinitions = new Map();
-    const fragmentDefinitions = new Map();
-    const graphQLFileMap = new Map();
-
-    for (const response of responses) {
-      const { filePath, content, asts, mtime, size } = response;
-
-      if (asts) {
-        for (const ast of asts) {
-          for (const definition of ast.definitions) {
-            if (definition.kind === Kind.FRAGMENT_DEFINITION) {
-              fragmentDefinitions.set(definition.name.value, {
-                filePath,
-                content,
-                definition,
-              });
-            } else if (isTypeDefinitionNode(definition)) {
-              objectTypeDefinitions.set(definition.name.value, {
-                filePath,
-                content,
-                definition,
-              });
-            }
-          }
-        }
-      }
-
-      // Relay the previous object whether or not ast exists.
-      graphQLFileMap.set(filePath, {
-        filePath,
-        content,
-        asts,
-        mtime,
-        size,
-      });
-    }
-
-    return {
-      objectTypeDefinitions,
-      fragmentDefinitions,
-      graphQLFileMap,
-    };
+      throw new Error("STUB");
   };
 
   /**
@@ -795,55 +484,6 @@ export class GraphQLCache {
   promiseToReadGraphQLFile = async (
     filePath: Uri,
   ): Promise<GraphQLFileInfo> => {
-    const content = await readFile(URI.parse(filePath).fsPath, 'utf-8');
-
-    const asts: DocumentNode[] = [];
-    let queries: CachedContent[] = [];
-    if (content.trim().length !== 0) {
-      try {
-        queries = await this._parser(
-          content,
-          filePath,
-          DEFAULT_SUPPORTED_EXTENSIONS,
-          DEFAULT_SUPPORTED_GRAPHQL_EXTENSIONS,
-          this._logger,
-        );
-        if (queries.length === 0) {
-          // still resolve with an empty ast
-          return {
-            filePath,
-            content,
-            asts: [],
-            queries: [],
-            mtime: 0,
-            size: 0,
-          };
-        }
-
-        for (const { query } of queries) {
-          asts.push(parse(query));
-        }
-        return {
-          filePath,
-          content,
-          asts,
-          queries,
-          mtime: 0,
-          size: 0,
-        };
-      } catch {
-        // If query has syntax errors, go ahead and still resolve
-        // the filePath and the content, but leave ast empty.
-        return {
-          filePath,
-          content,
-          asts: [],
-          queries: [],
-          mtime: 0,
-          size: 0,
-        };
-      }
-    }
-    return { filePath, content, asts, queries, mtime: 0, size: 0 };
+      throw new Error("STUB");
   };
 }

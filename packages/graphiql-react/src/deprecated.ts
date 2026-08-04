@@ -8,129 +8,55 @@ import type { MonacoEditor } from './types';
  * @deprecated Use `const { prettifyEditors } = useGraphiQLActions()` instead.
  */
 export function usePrettifyEditors() {
-  const { prettifyEditors } = useGraphiQLActions();
-  return prettifyEditors;
+    throw new Error("STUB");
 }
 
 /**
  * @deprecated Use `const { copyQuery } = useGraphiQLActions()` instead.
  */
 export function useCopyQuery() {
-  const { copyQuery } = useGraphiQLActions();
-  return copyQuery;
+    throw new Error("STUB");
 }
 
 /**
  * @deprecated Use `const { mergeQuery } = useGraphiQLActions()` instead.
  */
 export function useMergeQuery() {
-  const { mergeQuery } = useGraphiQLActions();
-  return mergeQuery;
+    throw new Error("STUB");
 }
 
 /**
  * @deprecated Use `useGraphiQLActions` and `useGraphiQL` hooks instead.
  */
 export function useEditorContext() {
-  const {
-    addTab,
-    changeTab,
-    moveTab,
-    closeTab,
-    updateActiveTabValues,
-    setEditor,
-    setOperationName,
-    setShouldPersistHeaders,
-  } = useGraphiQLActions();
-
-  const setHeaderEditor = (headerEditor: MonacoEditor) =>
-    setEditor({ headerEditor });
-  const setQueryEditor = (queryEditor: MonacoEditor) =>
-    setEditor({ queryEditor });
-  const setResponseEditor = (responseEditor: MonacoEditor) =>
-    setEditor({ responseEditor });
-  const setVariableEditor = (variableEditor: MonacoEditor) =>
-    setEditor({ variableEditor });
-
-  const values = useGraphiQL(
-    pick(
-      'headerEditor',
-      'queryEditor',
-      'responseEditor',
-      'variableEditor',
-      'initialHeaders',
-      'initialQuery',
-      'initialVariables',
-      'externalFragments',
-      'shouldPersistHeaders',
-    ),
-  );
-  return {
-    addTab,
-    changeTab,
-    moveTab,
-    closeTab,
-    updateActiveTabValues,
-    setHeaderEditor,
-    setQueryEditor,
-    setResponseEditor,
-    setVariableEditor,
-    setOperationName,
-    setShouldPersistHeaders,
-    ...values,
-  };
+    throw new Error("STUB");
 }
 
 /**
  * @deprecated Use `useGraphiQLActions` and `useGraphiQL` hooks instead.
  */
 export function useExecutionContext() {
-  const { run, stop } = useGraphiQLActions();
-  const values = useGraphiQL(state => ({
-    isFetching: state.isFetching,
-    isSubscribed: Boolean(state.subscription),
-    operationName: state.operationName,
-  }));
-  return {
-    run,
-    stop,
-    ...values,
-  };
+    throw new Error("STUB");
 }
 
 /**
  * @deprecated Use `useGraphiQLActions` and `useGraphiQL` hooks instead.
  */
 export function usePluginContext() {
-  const { setVisiblePlugin } = useGraphiQLActions();
-  const values = useGraphiQL(pick('plugins', 'visiblePlugin'));
-  return {
-    setVisiblePlugin,
-    ...values,
-  };
+    throw new Error("STUB");
 }
 
 /**
  * @deprecated Use `useGraphiQLActions` and `useGraphiQL` hooks instead.
  */
 export function useSchemaContext() {
-  const { introspect } = useGraphiQLActions();
-  const values = useGraphiQL(state => ({
-    isFetching: state.isIntrospecting,
-    fetchError: state.fetchError,
-    schema: state.schema,
-    validationErrors: state.validationErrors,
-  }));
-  return {
-    introspect,
-    ...values,
-  };
+    throw new Error("STUB");
 }
 
 /**
  * @deprecated Use `const storage = useGraphiQL(state => state.storage)` instead.
  */
-export const useStorage = () => useGraphiQL(state => state.storage);
+export const useStorage = () => { throw new Error("STUB"); };
 
 /**
  * @deprecated Use `const storage = useGraphiQL(state => state.storage)` instead.
@@ -141,12 +67,7 @@ export const useStorageContext = useStorage;
  * @deprecated Use `useGraphiQLActions` and `useGraphiQL` hooks instead.
  */
 export function useTheme() {
-  const { setTheme } = useGraphiQLActions();
-  const theme = useGraphiQL(state => state.theme);
-  return {
-    setTheme,
-    theme,
-  };
+    throw new Error("STUB");
 }
 
 /**

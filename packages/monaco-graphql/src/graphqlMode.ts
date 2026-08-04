@@ -20,11 +20,7 @@ export function setupMode(defaults: MonacoGraphQLAPI): IDisposable {
   const worker: languageFeatures.WorkerAccessor = (
     ...uris: Uri[]
   ): Promise<GraphQLWorker> => {
-    try {
-      return client.getLanguageServiceWorker(...uris);
-    } catch {
-      throw new Error('Error fetching graphql language service worker');
-    }
+      throw new Error("STUB");
   };
 
   function registerSchemaLessProviders(): void {
@@ -77,28 +73,7 @@ export function setupMode(defaults: MonacoGraphQLAPI): IDisposable {
   registerAllProviders(defaults);
 
   defaults.onDidChange(newDefaults => {
-    if (newDefaults.modeConfiguration !== modeConfiguration) {
-      modeConfiguration = newDefaults.modeConfiguration;
-      registerAllProviders(newDefaults);
-    }
-    if (newDefaults.formattingOptions !== formattingOptions) {
-      formattingOptions = newDefaults.formattingOptions;
-      registerSchemaLessProviders();
-    }
-    if (
-      newDefaults.externalFragmentDefinitions !== externalFragmentDefinitions
-    ) {
-      externalFragmentDefinitions = newDefaults.externalFragmentDefinitions;
-      registerAllProviders(newDefaults);
-    }
-    if (newDefaults.diagnosticSettings !== diagnosticSettings) {
-      diagnosticSettings = newDefaults.diagnosticSettings;
-      registerAllProviders(newDefaults);
-    }
-    if (newDefaults.schemas !== schemas) {
-      schemas = newDefaults.schemas;
-      registerAllProviders(newDefaults);
-    }
+      throw new Error("STUB");
   });
 
   disposables.push(asDisposable(providers));
@@ -107,7 +82,7 @@ export function setupMode(defaults: MonacoGraphQLAPI): IDisposable {
 }
 
 function asDisposable(disposables: IDisposable[]): IDisposable {
-  return { dispose: () => disposeAll(disposables) };
+  return { dispose: () => { throw new Error("STUB"); } };
 }
 
 function disposeAll(disposables: IDisposable[]) {

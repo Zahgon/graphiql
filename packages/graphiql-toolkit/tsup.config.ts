@@ -13,7 +13,7 @@ export default defineConfig([
     ...opts,
     format: 'esm',
     outDir: 'dist/esm',
-    outExtension: () => ({ js: '.js' }),
+    outExtension: () => { throw new Error("STUB"); },
     env: {
       USE_IMPORT: 'true',
     },
